@@ -14,11 +14,13 @@ image:
 common:
   # Every workload serves plain HTTP on this port.
   port: 8080
+  runAsUser: 65532
 
 backend:
   replicas: 1
   env:
     APP_MODE: "api"
+    PORT: "8080"
     APP_NAME: "backend"
     VERSION: "2.0.0"
   resources:
@@ -33,9 +35,10 @@ gateway:
   replicas: 1
   env:
     APP_MODE: "gateway"
+    PORT: "8080"
     APP_NAME: "gateway"
     VERSION: "2.0.0"
-    BACKEND_URL: "http://backend.default.svc:8080"
+    BACKEND_URL: "http://backend:8080"
   resources:
     requests:
       cpu: "50m"
@@ -48,6 +51,7 @@ worker:
   replicas: 1
   env:
     APP_MODE: "worker"
+    PORT: "8080"
     APP_NAME: "worker"
     VERSION: "2.0.0"
   resources:
@@ -63,6 +67,7 @@ reporter:
   serviceAccountName: reporter
   env:
     APP_MODE: "reporter"
+    PORT: "8080"
     APP_NAME: "reporter"
     VERSION: "2.0.0"
   resources:
@@ -77,14 +82,15 @@ metrics:
   replicas: 1
   env:
     APP_MODE: "api"
+    PORT: "8080"
     APP_NAME: "metrics"
     VERSION: "2.0.0"
   resources:
     requests:
-      cpu: "2"
+      cpu: "50m"
       memory: "64Mi"
     limits:
-      cpu: "4"
+      cpu: "200m"
       memory: "128Mi"
 
 migrate:
