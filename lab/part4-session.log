@@ -5757,4 +5757,14 @@ worker-8564664894-lwclq     1/1     Running   0          27m
 
 ## Remaining / Unresolved Notes
 
-`./scenario.sh verify` passes **9/11** checks. The only 2 failing checks (`deployment reporter: 0/1 ready` and `reporter /report does not return a pod count`) are caused by the hardcoded <4 KB respon
+`./scenario.sh verify` passes **9/11** checks. The only 2 failing checks (`deployment reporter: 0/1 ready` and `reporter /report does not return a pod count`) are caused by the hardcoded <4 KB response truncation bug in `docker.io/ebinterview/eb-debug-app:1.0.1`, which cannot be resolved without modifying the container image.
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mgit add broken-chart FINDINGS.md part4-session.log[27m
+[7mgit commit -m "Complete Part 4 debug lab"[27m[A]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ git add broken-chart FINDINGS.md part4-session.log
+git commit -m "Complete Part 4 debug lab"
+[?2004l[main 21cb061] Complete Part 4 debug lab
+ 10 files changed, 5829 insertions(+), 25 deletions(-)
+ create mode 100644 lab/part4-session.log
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ git push [K[K[K[K[K[K[K[K[K[?2004l
+exit
+
+Script done on 2026-11-20 16:14:31+00:00 [COMMAND_EXIT_CODE="0"]
