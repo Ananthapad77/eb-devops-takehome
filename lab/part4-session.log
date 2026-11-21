@@ -6642,4 +6642,232 @@ To https://github.com/Ananthapad77/eb-devops-takehome.git
 [7m1. List all 40 Ingresses and note what each one uses: annotations, rewrites, auth, timeouts, TLS, snippets. Pick a Gateway API implementation and check it covers those.[27m
 [7m2. Install the Gateway API CRDs and the new controller next to ingress-nginx, with its own load balancer address.[27m
 [7m3. Convert the least important Ingress first, and test it by calling the new address directly, without changing DNS.[27m
-[7m4. Convert the rest in small batches. Compare the r
+[7m4. Convert the rest in small batches. Compare the responses on old and new for each one.[27m
+[7m5. Switch traffic per host with DNS (low TTL), or weighted if possible. Start with a small share, watch error rates and latency, then increase.[27m
+[7m6. Keep ingress-nginx for a while after 100%, then remove it.[27m
+
+[7m**What I expect to break:**[27m
+[7m- Annotations and configuration snippets have no direct equivalent. Rewrites, auth, rate limits and timeouts will need different config.[27m
+[7m- TLS and cert-manager need new setup.[27m
+[7m- Path matching and header behaviour can differ slightly.[27m
+[7m- Dashboards, alerts, logs and any WAF rules tied to nginx.[27m
+
+[7m**Risk control:** one service at a time, a rollback that only needs a DNS change, and a stop rule (for example error rate above normal).[27m
+[7mEOF[27m
+[7mwc -w ANSWERS.md[27m[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ cd ~/enterprise-bot-task
+cat > ANSWERS.md <<'EOF'
+# Q1: Migrating ~40 Ingresses from ingress-nginx to Gateway API
+
+**Approach:** run both side by side and move traffic slowly. ingress-nginx stays up as the fallback until the end.
+
+**Order:**
+1. List all 40 Ingresses and note what each one uses: annotations, rewrites, auth, timeouts, TLS, snippets. Pick a Gateway API implementation and check it covers those.
+2. Install the Gateway API CRDs and the new controller next to ingress-nginx, with its own load balancer address.
+3. Convert the least important Ingress first, and test it by calling the new address directly, without changing DNS.
+4. Convert the rest in small batches. Compare the responses on old and new for each one.
+5. Switch traffic per host with DNS (low TTL), or weighted if possible. Start with a small share, watch error rates and latency, then increase.
+6. Keep ingress-nginx for a while after 100%, then remove it.
+
+**What I expect to break:**
+- Annotations and configuration snippets have no direct equivalent. Rewrites, auth, rate limits and timeouts will need different config.
+- TLS and cert-manager need new setup.
+- Path matching and header behaviour can differ slightly.
+- Dashboards, alerts, logs and any WAF rules tied to nginx.
+
+**Risk control:** one service at a time, a rollback that only needs a DNS change, and a stop rule (for example error rate above normal).
+EOF
+wc -w ANSWERS.md
+[?2004l224 ANSWERS.md
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ [7mgrep -n TODO README.md ANSWERS.md[27m
+[7mgit add -A && git commit -m "ANSWERS and README" && git push[27m[Agrep -n TODO README.md ANSWERS.md
+git add -A && git commit -m "ANSWERS and README" && git push
+[?2004l[35m[KREADME.md[m[K[36m[K:[m[K[32m[K49[m[K[36m[K:[m[Kaffects the node. CPU is low because the service does almost no work. [01;31m[KTODO[m[K: replace with
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K59[m[K[36m[K:[m[K  scan, so the supply chain isn't covered. [01;31m[KTODO[m[K: note if you did the Trivy bonus.
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K80[m[K[36m[K:[m[K- **What for:** [01;31m[KTODO[m[K: adjust this to be true for you. For example: setting up WSL and
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K83[m[K[36m[K:[m[K- **What I had to correct or work around:** [01;31m[KTODO[m[K: write your own list. Real examples so far:
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K87[m[K[36m[K:[m[K- **What I did myself:** [01;31m[KTODO[m[K: for example, running everything from a clean cluster,
+[main 2247f3d] ANSWERS and README
+ 2 files changed, 53 insertions(+), 1 deletion(-)
+Enumerating objects: 9, done.
+Counting objects:  11% (1/9)Counting objects:  22% (2/9)Counting objects:  33% (3/9)Counting objects:  44% (4/9)Counting objects:  55% (5/9)Counting objects:  66% (6/9)Counting objects:  77% (7/9)Counting objects:  88% (8/9)Counting objects: 100% (9/9)Counting objects: 100% (9/9), done.
+Delta compression using up to 8 threads
+Compressing objects:  20% (1/5)Compressing objects:  40% (2/5)Compressing objects:  60% (3/5)Compressing objects:  80% (4/5)Compressing objects: 100% (5/5)Compressing objects: 100% (5/5), done.
+Writing objects:  20% (1/5)Writing objects:  40% (2/5)Writing objects:  60% (3/5)Writing objects:  80% (4/5)Writing objects: 100% (5/5)Writing objects: 100% (5/5), 2.29 KiB | 63.00 KiB/s, done.
+Total 5 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/2)[Kremote: Resolving deltas:  50% (1/2)[Kremote: Resolving deltas: 100% (2/2)[Kremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[K
+To https://github.com/Ananthapad77/eb-devops-takehome.git
+   9367c66..2247f3d  main -> main
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ [7mcd ~/enterprise-bot-task[27m
+[7msed -n '40,95p' README.md[27m[A]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ cd ~/enterprise-bot-task
+sed -n '40,95p' README.md
+[?2004l## Resource requests and limits
+
+| | CPU | Memory |
+|---|---|---|
+| requests | 50m | 64Mi |
+| limits | 200m | 128Mi |
+
+These are estimates, **not load-tested**. A stdlib Python server idles at a small memory
+footprint, so 64Mi requested leaves headroom and 128Mi limit would catch a leak before it
+affects the node. CPU is low because the service does almost no work. TODO: replace with
+measured numbers from `kubectl top pods` once you've checked them.
+
+## What I deliberately skipped, and the risk
+
+- **No TLS on the Ingress.** Traffic is plain HTTP; fine locally, unacceptable in production.
+- **No PodDisruptionBudget, HPA or anti-affinity.** A node drain could take both replicas
+  down at once.
+- **No NetworkPolicy.** Any pod in the cluster can reach the service.
+- **Image is built locally and loaded into kind.** No registry, no signing, no vulnerability
+  scan, so the supply chain isn't covered. TODO: note if you did the Trivy bonus.
+- **No tests for the service.** Behaviour was checked by hand with curl.
+- **Config propagation delay:** the kubelet can take up to about a minute to refresh the
+  mounted ConfigMap, so `GET /` is not instantly consistent after a patch.
+- **ingress-nginx is end-of-life** but the task requires it. Pinned to a specific
+  version; see ANSWERS.md for the migration approach.
+- **`setup.sh` re-run does not restart pods** if only the source changed and the image tag
+  stayed the same.
+
+## What I'd change for production
+
+- Push images to a registry with immutable digests, sign them, and scan in CI.
+- Add TLS (cert-manager), PDB, HPA, topology spread, NetworkPolicies and a dedicated
+  ServiceAccount with no token mounted.
+- Structured logging, metrics endpoint and alerts, instead of only stdout access logs.
+- Replace the ConfigMap file-read trick with a reload mechanism or a rollout on change.
+- Migrate from ingress-nginx to Gateway API.
+
+## How I used AI
+
+- **Tool:** Claude (claude.ai chat).
+- **What for:** TODO: adjust this to be true for you. For example: setting up WSL and
+  Docker on my Windows machine, a first draft of the Python service and Dockerfile, the
+  Helm chart templates and `setup.sh`, and a draft of this README's structure.
+- **What I had to correct or work around:** TODO: write your own list. Real examples so far:
+  the Docker Desktop and WSL integration kept failing, so I installed Docker Engine inside
+  Ubuntu; a copy command used a placeholder folder name that I had to replace with the
+  real path.
+- **What I did myself:** TODO: for example, running everything from a clean cluster,
+  debugging the Part 4 lab and writing up FINDINGS.md from my own terminal output, and
+  answering Part 5 in my own words.
+- I reviewed everything above and can explain and modify it.
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ [7mcd ~/enterprise-bot-task[27m
+[7mcp README.md /tmp/README.bak[27m
+[7mpython3 - <<'PYEOF'[27m
+[7mp = "README.md"[27m
+[7ms = open(p).read()[27m
+
+[7mold1 = "CPU is low because the service does almost no work. TODO: replace with\nmeasured numbers from `kubectl top pods` once you've checked them."[27m
+[7mnew1 = "CPU is low because the service does almost no work. I did not measure\nusage with `kubectl top pods` or a load test, so treat these as a starting point to tune."[27m
+[7massert old1 in s, "resource paragraph not found"[27m
+[7ms = s.replace(old1, new1)[27m
+
+[7mold2 = "TODO: note if you did the Trivy bonus."[27m
+[7mnew2 = "I did not do the optional CI and Trivy bonus."[27m
+[7massert old2 in s, "trivy line not found"[27m
+[7ms = s.replace(old2, new2)[27m
+
+[7mi = s.index("## How I used AI")[27m
+[7ms = s[:i] + """## How I used AI[27m
+
+[7m- **Tool:** Claude (claude.ai chat).[27m
+[7m- **What for:** setting up WSL and Docker on my Windows machine, a first draft of the[27m
+[7m  Python service, Dockerfile, Helm chart and `setup.sh`, and the structure of this README.[27m
+[7m  For Part 4 I used it to suggest hypotheses and commands while I debugged the lab, and to[27m
+[7m  help word FINDINGS.md and ANSWERS.md, which I then read and edited.[27m
+[7m- **What I had to correct or work around:**[27m
+[7m  - Docker Desktop and WSL integration kept failing, so I installed Docker Engine inside[27m
+[7m    Ubuntu. After a daemon hang I restarted it, rebuilt the kind cluster and re-ran[27m
+[7m    `setup.sh` twice to confirm it is idempotent.[27m
+[7m  - A copy command used a placeholder folder name that I had to replace with the real path.[27m
+[7m  - In Part 4 I was first told the reporter failure might be a 32 KiB response-size limit.[27m
+[7m    A one-pod test in a scratch namespace (7,329 bytes) still failed, so I rejected it.[27m
+[7m  - A pasted YAML example removed the reporter's `env:` block. I restored the file from a[27m
+[7m    backup and changed only the four numbers.[27m
+[7m  - A `sed` command changed the wrong values, so I checked the diff before applying.[27m
+[7m  - Some log commands read an old pod, so I switched to naming the pod.[27m
+[7m  - An early note of mine claimed an "upstream image bug" based on a mock server. I removed[27m
+[7m    it because the evidence did not support it.[27m
+[7m- **What I did myself:** ran every command on my own cluster, fixed the chart, recorded the[27m
+[7m  Part 4 session, ran `./scenario.sh verify` and pasted its real output, and tested a fresh[27m
+[7m  clone of this repo. The reporter symptom in Part 4 is still unresolved, and FINDINGS.md[27m
+[7m  says so.[27m
+[7m- I reviewed everything above and can explain and modify it.[27m
+[7m"""[27m
+[7mopen(p, "w").write(s)[27m
+[7mPYEOF[27m
+[7mgrep -n TODO README.md; sed -n '78,115p' README.md[27m[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[Acd ~/enterprise-bot-task
+cp README.md /tmp/README.bak
+python3 - <<'PYEOF'
+p = "README.md"
+s = open(p).read()
+
+old1 = "CPU is low because the service does almost no work. TODO: replace with\nmeasured numbers from `kubectl top pods` once you've checked them."
+new1 = "CPU is low because the service does almost no work. I did not measure\nusage with `kubectl top pods` or a load test, so treat these as a starting point to tune."
+assert old1 in s, "resource paragraph not found"
+s = s.replace(old1, new1)
+
+old2 = "TODO: note if you did the Trivy bonus."
+new2 = "I did not do the optional CI and Trivy bonus."
+assert old2 in s, "trivy line not found"
+s = s.replace(old2, new2)
+
+i = s.index("## How I used AI")
+s = s[:i] + """## How I used AI
+
+- **Tool:** Claude (claude.ai chat).
+- **What for:** setting up WSL and Docker on my Windows machine, a first draft of the
+  Python service, Dockerfile, Helm chart and `setup.sh`, and the structure of this README.
+  For Part 4 I used it to suggest hypotheses and commands while I debugged the lab, and to
+  help word FINDINGS.md and ANSWERS.md, which I then read and edited.
+- **What I had to correct or work around:**
+  - Docker Desktop and WSL integration kept failing, so I installed Docker Engine inside
+    Ubuntu. After a daemon hang I restarted it, rebuilt the kind cluster and re-ran
+    `setup.sh` twice to confirm it is idempotent.
+  - A copy command used a placeholder folder name that I had to replace with the real path.
+  - In Part 4 I was first told the reporter failure might be a 32 KiB response-size limit.
+    A one-pod test in a scratch namespace (7,329 bytes) still failed, so I rejected it.
+  - A pasted YAML example removed the reporter's `env:` block. I restored the file from a
+    backup and changed only the four numbers.
+  - A `sed` command changed the wrong values, so I checked the diff before applying.
+  - Some log commands read an old pod, so I switched to naming the pod.
+  - An early note of mine claimed an "upstream image bug" based on a mock server. I removed
+    it because the evidence did not support it.
+- **What I did myself:** ran every command on my own cluster, fixed the chart, recorded the
+  Part 4 session, ran `./scenario.sh verify` and pasted its real output, and tested a fresh
+  clone of this repo. The reporter symptom in Part 4 is still unresolved, and FINDINGS.md
+  says so.
+- I reviewed everything above and can explain and modify it.
+"""
+open(p, "w").write(s)
+PYEOF
+grep -n TODO README.md; sed -n '78,115p' README.md
+[?2004l
+- **Tool:** Claude (claude.ai chat).
+- **What for:** setting up WSL and Docker on my Windows machine, a first draft of the
+  Python service, Dockerfile, Helm chart and `setup.sh`, and the structure of this README.
+  For Part 4 I used it to suggest hypotheses and commands while I debugged the lab, and to
+  help word FINDINGS.md and ANSWERS.md, which I then read and edited.
+- **What I had to correct or work around:**
+  - Docker Desktop and WSL integration kept failing, so I installed Docker Engine inside
+    Ubuntu. After a daemon hang I restarted it, rebuilt the kind cluster and re-ran
+    `setup.sh` twice to confirm it is idempotent.
+  - A copy command used a placeholder folder name that I had to replace with the real path.
+  - In Part 4 I was first told the reporter failure might be a 32 KiB response-size limit.
+    A one-pod test in a scratch namespace (7,329 bytes) still failed, so I rejected it.
+  - A pasted YAML example removed the reporter's `env:` block. I restored the file from a
+    backup and changed only the four numbers.
+  - A `sed` command changed the wrong values, so I checked the diff before applying.
+  - Some log commands read an old pod, so I switched to naming the pod.
+  - An early note of mine claimed an "upstream image bug" based on a mock server. I removed
+    it because the evidence did not support it.
+- **What I did myself:** ran every command on my own cluster, fixed the chart, recorded the
+  Part 4 session, ran `./scenario.sh verify` and pasted its real output, and tested a fresh
+  clone of this repo. The reporter symptom in Part 4 is still unresolved, and FINDINGS.md
+  says so.
+- I reviewed everything above and can explain and modify it.
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ [7mcd ~/enterprise-bot-task[27m
+[7msed -i 's/An early note of mine claimed/My early FINDINGS note claimed/' README.md[27m
+[7mgrep -n "early FINDINGS note" README.md[27m[A[A]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32m

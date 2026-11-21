@@ -46,8 +46,8 @@ Lab: see `lab/FINDINGS.md`. Session recording: `lab/part4-session.log`.
 
 These are estimates, **not load-tested**. A stdlib Python server idles at a small memory
 footprint, so 64Mi requested leaves headroom and 128Mi limit would catch a leak before it
-affects the node. CPU is low because the service does almost no work. TODO: replace with
-measured numbers from `kubectl top pods` once you've checked them.
+affects the node. CPU is low because the service does almost no work. I did not measure
+usage with `kubectl top pods` or a load test, so treat these as a starting point to tune.
 
 ## What I deliberately skipped, and the risk
 
@@ -56,7 +56,7 @@ measured numbers from `kubectl top pods` once you've checked them.
   down at once.
 - **No NetworkPolicy.** Any pod in the cluster can reach the service.
 - **Image is built locally and loaded into kind.** No registry, no signing, no vulnerability
-  scan, so the supply chain isn't covered. TODO: note if you did the Trivy bonus.
+  scan, so the supply chain isn't covered. I did not do the optional CI and Trivy bonus.
 - **No tests for the service.** Behaviour was checked by hand with curl.
 - **Config propagation delay:** the kubelet can take up to about a minute to refresh the
   mounted ConfigMap, so `GET /` is not instantly consistent after a patch.
@@ -77,14 +77,25 @@ measured numbers from `kubectl top pods` once you've checked them.
 ## How I used AI
 
 - **Tool:** Claude (claude.ai chat).
-- **What for:** TODO: adjust this to be true for you. For example: setting up WSL and
-  Docker on my Windows machine, a first draft of the Python service and Dockerfile, the
-  Helm chart templates and `setup.sh`, and a draft of this README's structure.
-- **What I had to correct or work around:** TODO: write your own list. Real examples so far:
-  the Docker Desktop and WSL integration kept failing, so I installed Docker Engine inside
-  Ubuntu; a copy command used a placeholder folder name that I had to replace with the
-  real path.
-- **What I did myself:** TODO: for example, running everything from a clean cluster,
-  debugging the Part 4 lab and writing up FINDINGS.md from my own terminal output, and
-  answering Part 5 in my own words.
+- **What for:** setting up WSL and Docker on my Windows machine, a first draft of the
+  Python service, Dockerfile, Helm chart and `setup.sh`, and the structure of this README.
+  For Part 4 I used it to suggest hypotheses and commands while I debugged the lab, and to
+  help word FINDINGS.md and ANSWERS.md, which I then read and edited.
+- **What I had to correct or work around:**
+  - Docker Desktop and WSL integration kept failing, so I installed Docker Engine inside
+    Ubuntu. After a daemon hang I restarted it, rebuilt the kind cluster and re-ran
+    `setup.sh` twice to confirm it is idempotent.
+  - A copy command used a placeholder folder name that I had to replace with the real path.
+  - In Part 4 I was first told the reporter failure might be a 32 KiB response-size limit.
+    A one-pod test in a scratch namespace (7,329 bytes) still failed, so I rejected it.
+  - A pasted YAML example removed the reporter's `env:` block. I restored the file from a
+    backup and changed only the four numbers.
+  - A `sed` command changed the wrong values, so I checked the diff before applying.
+  - Some log commands read an old pod, so I switched to naming the pod.
+  - My early FINDINGS note claimed an "upstream image bug" based on a mock server. I removed
+    it because the evidence did not support it.
+- **What I did myself:** ran every command on my own cluster, fixed the chart, recorded the
+  Part 4 session, ran `./scenario.sh verify` and pasted its real output, and tested a fresh
+  clone of this repo. The reporter symptom in Part 4 is still unresolved, and FINDINGS.md
+  says so.
 - I reviewed everything above and can explain and modify it.
