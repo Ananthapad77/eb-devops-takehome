@@ -6375,4 +6375,238 @@ NAME      ENDPOINTS          AGE
 backend   10.244.0.12:8080   27m
 {"status":"ok"}
  exit=0
-  [32m[01;31m[KPASS[m[K
+  [32m[01;31m[KPASS[m[K[0m  migrate Job completed
+  [32m[01;31m[KPASS[m[K[0m  deployment backend: 1/1 ready
+  [32m[01;31m[KPASS[m[K[0m  deployment gateway: 1/1 ready
+  [32m[01;31m[KPASS[m[K[0m  deployment worker: 1/1 ready
+  [31m[01;31m[KFAIL[m[K[0m  deployment reporter: 0/1 ready
+  [32m[01;31m[KPASS[m[K[0m  deployment metrics: 1/1 ready
+  [32m[01;31m[KPASS[m[K[0m  no pods in CrashLoopBackOff
+  [32m[01;31m[KPASS[m[K[0m  ServiceAccount debug-lab/reporter can list pods
+  [32m[01;31m[KPASS[m[K[0m  backend answers on http://backend:8080/healthz
+  [32m[01;31m[KPASS[m[K[0m  gateway /status reports backend=ok
+  [31m[01;31m[KFAIL[m[K[0m  reporter /report does not return a pod count
+[31m2 check(s) failing[0m, 9 [01;31m[Kpassing[m[K. Keep digging — every failure is a symptom.
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7m./scenario.sh verify 2>&1 | tee /tmp/verify-final.txt | grep -E "PASS|FAIL|passing"[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C./scenario.sh verify 2>&1 | tee /tmp/verify-final.txt | grep -E "PASS|FAIL|passing"
+[?2004l  [32m[01;31m[KPASS[m[K[0m  migrate Job completed
+  [32m[01;31m[KPASS[m[K[0m  deployment backend: 1/1 ready
+  [32m[01;31m[KPASS[m[K[0m  deployment gateway: 1/1 ready
+  [32m[01;31m[KPASS[m[K[0m  deployment worker: 1/1 ready
+  [31m[01;31m[KFAIL[m[K[0m  deployment reporter: 0/1 ready
+  [32m[01;31m[KPASS[m[K[0m  deployment metrics: 1/1 ready
+  [32m[01;31m[KPASS[m[K[0m  no pods in CrashLoopBackOff
+  [32m[01;31m[KPASS[m[K[0m  ServiceAccount debug-lab/reporter can list pods
+  [32m[01;31m[KPASS[m[K[0m  backend answers on http://backend:8080/healthz
+  [32m[01;31m[KPASS[m[K[0m  gateway /status reports backend=ok
+  [31m[01;31m[KFAIL[m[K[0m  reporter /report does not return a pod count
+[31m2 check(s) failing[0m, 9 [01;31m[Kpassing[m[K. Keep digging — every failure is a symptom.
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mcd ~/enterprise-bot-task[27m
+[7mgit add -A && git commit -m "Part 4: session log, FINDINGS" && git push -u origin HEAD 2>&1 | tail -15[27m[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccd ~/enterprise-bot-task
+git add -A && git commit -m "Part 4: session log, FINDINGS" && git push -u origin HEAD 2>&1 | tail -15
+[?2004l[main 3dafa77] Part 4: session log, FINDINGS
+ 1 file changed, 608 insertions(+)
+To https://github.com/Ananthapad77/eb-devops-takehome.git
+   4c65077..3dafa77  HEAD -> main
+branch 'main' set up to track 'origin/main'.
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ [7mcd ~/enterprise-bot-task[27m
+[7mgrep -n -i -E "eyJ[A-Za-z0-9_-]{20,}|bearer [A-Za-z0-9]|BEGIN (RSA|PRIVATE)" lab/part4-session.log | head[27m[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccd ~/enterprise-bot-task
+grep -n -i -E "eyJ[A-Za-z0-9_-]{20,}|bearer [A-Za-z0-9]|BEGIN (RSA|PRIVATE)" lab/part4-session.log | head
+[?2004l[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ [7mcd /tmp && rm -rf clonetest && git clone https://github.com/Ananthapad77/eb-devops-takehome clonetest[27m
+[7mls -a clonetest && test -x clonetest/setup.sh && echo ok[27m[Acd /tmp && rm -rf clonetest && git clone https://github.com/Ananthapad77/eb-devops-takehome clonetest
+ls -a clonetest && test -x clonetest/setup.sh && echo ok
+[?2004lCloning into 'clonetest'...
+remote: Enumerating objects: 70, done.[K
+remote: Counting objects:   1% (1/70)[Kremote: Counting objects:   2% (2/70)[Kremote: Counting objects:   4% (3/70)[Kremote: Counting objects:   5% (4/70)[Kremote: Counting objects:   7% (5/70)[Kremote: Counting objects:   8% (6/70)[Kremote: Counting objects:  10% (7/70)[Kremote: Counting objects:  11% (8/70)[Kremote: Counting objects:  12% (9/70)[Kremote: Counting objects:  14% (10/70)[Kremote: Counting objects:  15% (11/70)[Kremote: Counting objects:  17% (12/70)[Kremote: Counting objects:  18% (13/70)[Kremote: Counting objects:  20% (14/70)[Kremote: Counting objects:  21% (15/70)[Kremote: Counting objects:  22% (16/70)[Kremote: Counting objects:  24% (17/70)[Kremote: Counting objects:  25% (18/70)[Kremote: Counting objects:  27% (19/70)[Kremote: Counting objects:  28% (20/70)[Kremote: Counting objects:  30% (21/70)[Kremote: Counting objects:  31% (22/70)[Kremote: Counting objects:  32% (23/70)[Kremote: Counting objects:  34% (24/70)[Kremote: Counting objects:  35% (25/70)[Kremote: Counting objects:  37% (26/70)[Kremote: Counting objects:  38% (27/70)[Kremote: Counting objects:  40% (28/70)[Kremote: Counting objects:  41% (29/70)[Kremote: Counting objects:  42% (30/70)[Kremote: Counting objects:  44% (31/70)[Kremote: Counting objects:  45% (32/70)[Kremote: Counting objects:  47% (33/70)[Kremote: Counting objects:  48% (34/70)[Kremote: Counting objects:  50% (35/70)[Kremote: Counting objects:  51% (36/70)[Kremote: Counting objects:  52% (37/70)[Kremote: Counting objects:  54% (38/70)[Kremote: Counting objects:  55% (39/70)[Kremote: Counting objects:  57% (40/70)[Kremote: Counting objects:  58% (41/70)[Kremote: Counting objects:  60% (42/70)[Kremote: Counting objects:  61% (43/70)[Kremote: Counting objects:  62% (44/70)[Kremote: Counting objects:  64% (45/70)[Kremote: Counting objects:  65% (46/70)[Kremote: Counting objects:  67% (47/70)[Kremote: Counting objects:  68% (48/70)[Kremote: Counting objects:  70% (49/70)[Kremote: Counting objects:  71% (50/70)[Kremote: Counting objects:  72% (51/70)[Kremote: Counting objects:  74% (52/70)[Kremote: Counting objects:  75% (53/70)[Kremote: Counting objects:  77% (54/70)[Kremote: Counting objects:  78% (55/70)[Kremote: Counting objects:  80% (56/70)[Kremote: Counting objects:  81% (57/70)[Kremote: Counting objects:  82% (58/70)[Kremote: Counting objects:  84% (59/70)[Kremote: Counting objects:  85% (60/70)[Kremote: Counting objects:  87% (61/70)[Kremote: Counting objects:  88% (62/70)[Kremote: Counting objects:  90% (63/70)[Kremote: Counting objects:  91% (64/70)[Kremote: Counting objects:  92% (65/70)[Kremote: Counting objects:  94% (66/70)[Kremote: Counting objects:  95% (67/70)[Kremote: Counting objects:  97% (68/70)[Kremote: Counting objects:  98% (69/70)[Kremote: Counting objects: 100% (70/70)[Kremote: Counting objects: 100% (70/70), done.[K
+remote: Compressing objects:   2% (1/46)[Kremote: Compressing objects:   4% (2/46)[Kremote: Compressing objects:   6% (3/46)[Kremote: Compressing objects:   8% (4/46)[Kremote: Compressing objects:  10% (5/46)[Kremote: Compressing objects:  13% (6/46)[Kremote: Compressing objects:  15% (7/46)[Kremote: Compressing objects:  17% (8/46)[Kremote: Compressing objects:  19% (9/46)[Kremote: Compressing objects:  21% (10/46)[Kremote: Compressing objects:  23% (11/46)[Kremote: Compressing objects:  26% (12/46)[Kremote: Compressing objects:  28% (13/46)[Kremote: Compressing objects:  30% (14/46)[Kremote: Compressing objects:  32% (15/46)[Kremote: Compressing objects:  34% (16/46)[Kremote: Compressing objects:  36% (17/46)[Kremote: Compressing objects:  39% (18/46)[Kremote: Compressing objects:  41% (19/46)[Kremote: Compressing objects:  43% (20/46)[Kremote: Compressing objects:  45% (21/46)[Kremote: Compressing objects:  47% (22/46)[Kremote: Compressing objects:  50% (23/46)[Kremote: Compressing objects:  52% (24/46)[Kremote: Compressing objects:  54% (25/46)[Kremote: Compressing objects:  56% (26/46)[Kremote: Compressing objects:  58% (27/46)[Kremote: Compressing objects:  60% (28/46)[Kremote: Compressing objects:  63% (29/46)[Kremote: Compressing objects:  65% (30/46)[Kremote: Compressing objects:  67% (31/46)[Kremote: Compressing objects:  69% (32/46)[Kremote: Compressing objects:  71% (33/46)[Kremote: Compressing objects:  73% (34/46)[Kremote: Compressing objects:  76% (35/46)[Kremote: Compressing objects:  78% (36/46)[Kremote: Compressing objects:  80% (37/46)[Kremote: Compressing objects:  82% (38/46)[Kremote: Compressing objects:  84% (39/46)[Kremote: Compressing objects:  86% (40/46)[Kremote: Compressing objects:  89% (41/46)[Kremote: Compressing objects:  91% (42/46)[Kremote: Compressing objects:  93% (43/46)[Kremote: Compressing objects:  95% (44/46)[Kremote: Compressing objects:  97% (45/46)[Kremote: Compressing objects: 100% (46/46)[Kremote: Compressing objects: 100% (46/46), done.[K
+Receiving objects:   1% (1/70)Receiving objects:   2% (2/70)Receiving objects:   4% (3/70)Receiving objects:   5% (4/70)Receiving objects:   7% (5/70)Receiving objects:   8% (6/70)Receiving objects:  10% (7/70)Receiving objects:  11% (8/70)Receiving objects:  12% (9/70)Receiving objects:  14% (10/70)Receiving objects:  15% (11/70)Receiving objects:  17% (12/70)Receiving objects:  18% (13/70)Receiving objects:  20% (14/70)Receiving objects:  21% (15/70)Receiving objects:  22% (16/70)Receiving objects:  24% (17/70)Receiving objects:  25% (18/70)Receiving objects:  27% (19/70)Receiving objects:  28% (20/70)Receiving objects:  30% (21/70)Receiving objects:  31% (22/70)Receiving objects:  32% (23/70)Receiving objects:  34% (24/70)Receiving objects:  35% (25/70)Receiving objects:  37% (26/70)Receiving objects:  38% (27/70)Receiving objects:  40% (28/70)Receiving objects:  41% (29/70)Receiving objects:  42% (30/70)Receiving objects:  44% (31/70)Receiving objects:  45% (32/70)Receiving objects:  47% (33/70)Receiving objects:  48% (34/70)Receiving objects:  50% (35/70)Receiving objects:  51% (36/70)Receiving objects:  52% (37/70)Receiving objects:  54% (38/70)Receiving objects:  55% (39/70)Receiving objects:  57% (40/70)Receiving objects:  58% (41/70)Receiving objects:  60% (42/70)Receiving objects:  61% (43/70)Receiving objects:  62% (44/70)Receiving objects:  64% (45/70)Receiving objects:  65% (46/70)Receiving objects:  67% (47/70)Receiving objects:  68% (48/70)Receiving objects:  70% (49/70)remote: Total 70 (delta 25), reused 68 (delta 23), pack-reused 0 (from 0)[K
+Receiving objects:  71% (50/70)Receiving objects:  72% (51/70)Receiving objects:  74% (52/70)Receiving objects:  75% (53/70)Receiving objects:  77% (54/70)Receiving objects:  78% (55/70)Receiving objects:  80% (56/70)Receiving objects:  81% (57/70)Receiving objects:  82% (58/70)Receiving objects:  84% (59/70)Receiving objects:  85% (60/70)Receiving objects:  87% (61/70)Receiving objects:  88% (62/70)Receiving objects:  90% (63/70)Receiving objects:  91% (64/70)Receiving objects:  92% (65/70)Receiving objects:  94% (66/70)Receiving objects:  95% (67/70)Receiving objects:  97% (68/70)Receiving objects:  98% (69/70)Receiving objects: 100% (70/70)Receiving objects: 100% (70/70), 126.54 KiB | 372.00 KiB/s, done.
+Resolving deltas:   0% (0/25)Resolving deltas:   4% (1/25)Resolving deltas:   8% (2/25)Resolving deltas:  12% (3/25)Resolving deltas:  16% (4/25)Resolving deltas:  24% (6/25)Resolving deltas:  36% (9/25)Resolving deltas:  40% (10/25)Resolving deltas:  44% (11/25)Resolving deltas:  48% (12/25)Resolving deltas:  52% (13/25)Resolving deltas:  56% (14/25)Resolving deltas:  60% (15/25)Resolving deltas:  64% (16/25)Resolving deltas:  68% (17/25)Resolving deltas:  72% (18/25)Resolving deltas:  80% (20/25)Resolving deltas:  84% (21/25)Resolving deltas:  88% (22/25)Resolving deltas:  92% (23/25)Resolving deltas:  96% (24/25)Resolving deltas: 100% (25/25)Resolving deltas: 100% (25/25), done.
+[0m[01;34m.[0m  [30;42m..[0m  [01;34m.git[0m  ANSWERS.md  README.md  [01;34mchart[0m  [01;34mlab[0m  [01;34mservice[0m  [01;32msetup.sh[0m
+ok
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mls -a /tmp/clonetest/service[27m
+[7mcd /tmp/clonetest[27m
+[7mwc -c ANSWERS.md[27m
+[7mgrep -rn -i -E "upstream|hardcoded|cannot be (fixed|resolved)|4 ?KB|4,082|TODO" README.md lab/FINDINGS.md ANSWERS.md[27m[A[A[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cls -a /tmp/clonetest/service
+cd /tmp/clonetest
+wc -c ANSWERS.md
+grep -rn -i -E "upstream|hardcoded|cannot be (fixed|resolved)|4 ?KB|4,082|TODO" README.md lab/FINDINGS.md ANSWERS.md
+[?2004l[0m[01;34m.[0m  [01;34m..[0m  .dockerignore  Dockerfile  app.py
+0 ANSWERS.md
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K49[m[K[36m[K:[m[Kaffects the node. CPU is low because the service does almost no work. [01;31m[KTODO[m[K: replace with
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K59[m[K[36m[K:[m[K  scan, so the supply chain isn't covered. [01;31m[KTODO[m[K: note if you did the Trivy bonus.
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K80[m[K[36m[K:[m[K- **What for:** [01;31m[KTODO[m[K: adjust this to be true for you. For example: setting up WSL and
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K83[m[K[36m[K:[m[K- **What I had to correct or work around:** [01;31m[KTODO[m[K: write your own list. Real examples so far:
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K87[m[K[36m[K:[m[K- **What I did myself:** [01;31m[KTODO[m[K: for example, running everything from a clean cluster,
+[35m[Klab/FINDINGS.md[m[K[36m[K:[m[K[32m[K86[m[K[36m[K:[m[K## Defect 6: `reporter` RBAC RoleBinding bound to `default` ServiceAccount (+ [01;31m[Kupstream[m[K image bug)
+[35m[Klab/FINDINGS.md[m[K[36m[K:[m[K[32m[K95[m[K[36m[K:[m[K2. **[01;31m[KUpstream[m[K image defect (`eb-debug-app:1.0.1`):** Even with valid RBAC, `eb-debug-app:1.0.1` has a [01;31m[Khardcoded[m[K response-body read cap below **[01;31m[K4,082[m[K bytes** when parsing `GET https://kubernetes.default.svc/api/v1/namespaces/debug-lab/pods?limit=100`. The Kubernetes API returns a valid `HTTP 200` `PodList` of **47,959 bytes**, which the binary truncates mid-JSON.
+[35m[Klab/FINDINGS.md[m[K[36m[K:[m[K[32m[K99[m[K[36m[K:[m[K2. Left `image.repository` and `image.tag` untouched per lab rules; fixing the JSON truncation requires an [01;31m[Kupstream[m[K image fix (raising/removing the response read limit or streaming the JSON decode).
+[35m[Klab/FINDINGS.md[m[K[36m[K:[m[K[32m[K105[m[K[36m[K:[m[K4. Isolated `eb-debug-app:1.0.1` in Docker against a local HTTPS mock `kubernetes.default.svc`: a **37-byte** `PodList` returned `HTTP/1.1 200 OK` (`{"namespace":"debug-lab","pod":"d2f044d14dd2","pods":1}`), while a **[01;31m[K4,082[m[K-byte** `PodList` immediately reproduced `{"error":"parse pod list: unexpected end of JSON input","status":"unhealthy"}`.
+[35m[Klab/FINDINGS.md[m[K[36m[K:[m[K[32m[K111[m[K[36m[K:[m[K`./scenario.sh verify` passes **9/11** checks. The only 2 failing checks (`deployment reporter: 0/1 ready` and `reporter /report does not return a pod count`) are caused by the [01;31m[Khardcoded[m[K <[01;31m[K4 KB[m[K response truncation bug in `docker.io/ebinterview/eb-debug-app:1.0.1`, which [01;31m[Kcannot be resolved[m[K without modifying the container image.
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp/clonetest[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp/clonetest[00m$ [7mcd ~/enterprise-bot-task/lab[27m
+[7mcp FINDINGS.md /tmp/FINDINGS.bak[27m
+[7mhead -n 85 FINDINGS.md > /tmp/F.new[27m
+[7m{[27m
+[7mcat <<'EOF'[27m
+[7m## Defect 6: reporter (partly fixed, one symptom unresolved)[27m
+
+[7m**Symptom:**[27m
+[7m`kubectl logs` for the reporter pod:[27m[A[A[A[A[A[A[A[A]0;user@LAPTOP-SVC6BC1F: /tmp/clonetest[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp/clonetest[00m$ cd ~/enterprise-bot-task/lab
+cp FINDINGS.md /tmp/FINDINGS.bak
+head -n 85 FINDINGS.md > /tmp/F.new
+{
+cat <<'EOF'
+## Defect 6: reporter (partly fixed, one symptom unresolved)
+
+**Symptom:**
+`kubectl logs` for the reporter pod:
+[?2004l[?2004h> ^C[?2004l[?2004h[?2004l
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mcd ~/enterprise-bot-task/lab[27m
+[7mwc -l FINDINGS.md[27m[A]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ cd ~/enterprise-bot-task/lab
+wc -l FINDINGS.md
+[?2004l111 FINDINGS.md
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mhead -n 85 FINDINGS.md > /tmp/F.new[27m
+[7mcat >> /tmp/F.new <<'EOF'[27m
+[7m## Defect 6: reporter (partly fixed, one symptom unresolved)[27m
+
+[7m**Symptom:**[27m
+[7mReporter pod logs (`kubectl logs`):[27m
+
+[7m    pod list failed: parse pod list: unexpected end of JSON input[27m
+[7m    GET /healthz -> 503[27m
+
+[7mThe pod stays 0/1 Ready with 0 restarts. `./scenario.sh verify`, run twice on 21 Nov with the same result:[27m
+
+[7mEOF[27m
+[7msed 's/\x1b\[[0-9;]*m//g' /tmp/verify-final.txt | grep -E "PASS|FAIL|passing" | sed 's/^/    /' >> /tmp/F.new[27m
+[7mcat >> /tmp/F.new <<'EOF'[27m
+
+[7m**Cause (fixed part):** the RoleBinding subject in `rbac.yaml` was the `default`[27m
+[7mServiceAccount, not `reporter`.[27m
+
+[7m**Fix:** subject `name: reporter`. `kubectl auth can-i list pods` now says yes and that check passes.[27m
+
+[7m**Unresolved:** I did not find why `/report` still fails. I do not know the cause.[27m
+
+[7mRuled out, each with a test:[27m
+
+[7m| Hypothesis | Test | Result |[27m
+[7m|---|---|---|[27m
+[7m| RBAC | `can-i`; fetched the pod list as the reporter's ServiceAccount | allowed, full body |[27m
+[7m| Crash / OOM | pod restarts | 0 restarts |[27m
+[7m| Network path | request from inside the pod network | 200 with a full body |[27m
+[7m| CPU / memory limits | raised to 500m / 256Mi, waited 3+ min | same error; reverted |[27m
+[7m| Pod-list size | scratch namespace, one reporter pod, 7,329 bytes | same error; also fails at 41 KB and 83 KB |[27m
+[7m| Writable volume | emptyDir at /var/cache/app | same error |[27m
+
+[7mSide observation, not evidence: a local mock API returned a 37-byte list (accepted) and[27m
+[7ma 4,082-byte list (failed). The real one-pod list is over 7 KB and the mock may differ from the[27m
+[7mreal API, so I do not conclude the app has a size cap.[27m
+
+[7m**How I found it / what I would try next:** the RBAC fix came from `can-i`. For the rest I[27m
+[7mworked down the table above. Next I would capture the app's real request and response with a[27m
+[7mlogging proxy, test an older kind node image (mine is v1.34.0), and ask the author about[27m
+[7mknown issues with eb-debug-app:1.0.1 in reporter mode.[27m
+[7mEOF[27m
+[7mcp /tmp/F.new FINDINGS.md[27m
+[7msed -n '80,140p' FINDINGS.md[27m
+[7mgrep -n -i -E "upstream|hardcoded|cannot be|9/11" FINDINGS.md[27m[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[Ahead -n 85 FINDINGS.md > /tmp/F.new
+cat >> /tmp/F.new <<'EOF'
+## Defect 6: reporter (partly fixed, one symptom unresolved)
+
+**Symptom:**
+Reporter pod logs (`kubectl logs`):
+
+    pod list failed: parse pod list: unexpected end of JSON input
+    GET /healthz -> 503
+
+The pod stays 0/1 Ready with 0 restarts. `./scenario.sh verify`, run twice on 21 Nov with the same result:
+
+EOF
+sed 's/\x1b\[[0-9;]*m//g' /tmp/verify-final.txt | grep -E "PASS|FAIL|passing" | sed 's/^/    /' >> /tmp/F.new
+cat >> /tmp/F.new <<'EOF'
+
+**Cause (fixed part):** the RoleBinding subject in `rbac.yaml` was the `default`
+ServiceAccount, not `reporter`.
+
+**Fix:** subject `name: reporter`. `kubectl auth can-i list pods` now says yes and that check passes.
+
+**Unresolved:** I did not find why `/report` still fails. I do not know the cause.
+
+Ruled out, each with a test:
+
+| Hypothesis | Test | Result |
+|---|---|---|
+| RBAC | `can-i`; fetched the pod list as the reporter's ServiceAccount | allowed, full body |
+| Crash / OOM | pod restarts | 0 restarts |
+| Network path | request from inside the pod network | 200 with a full body |
+| CPU / memory limits | raised to 500m / 256Mi, waited 3+ min | same error; reverted |
+| Pod-list size | scratch namespace, one reporter pod, 7,329 bytes | same error; also fails at 41 KB and 83 KB |
+| Writable volume | emptyDir at /var/cache/app | same error |
+
+Side observation, not evidence: a local mock API returned a 37-byte list (accepted) and
+a 4,082-byte list (failed). The real one-pod list is over 7 KB and the mock may differ from the
+real API, so I do not conclude the app has a size cap.
+
+**How I found it / what I would try next:** the RBAC fix came from `can-i`. For the rest I
+worked down the table above. Next I would capture the app's real request and response with a
+logging proxy, test an older kind node image (mine is v1.34.0), and ask the author about
+known issues with eb-debug-app:1.0.1 in reporter mode.
+EOF
+cp /tmp/F.new FINDINGS.md
+sed -n '80,140p' FINDINGS.md
+grep -n -i -E "upstream|hardcoded|cannot be|9/11" FINDINGS.md
+[?2004l
+**How I found it:**
+Checked ReplicaSet events (`kubectl -n debug-lab describe rs`) and compared against `cluster-state/limits.yaml`.
+
+---
+
+## Defect 6: reporter (partly fixed, one symptom unresolved)
+
+**Symptom:**
+Reporter pod logs (`kubectl logs`):
+
+    pod list failed: parse pod list: unexpected end of JSON input
+    GET /healthz -> 503
+
+The pod stays 0/1 Ready with 0 restarts. `./scenario.sh verify`, run twice on 21 Nov with the same result:
+
+      PASS  migrate Job completed
+      PASS  deployment backend: 1/1 ready
+      PASS  deployment gateway: 1/1 ready
+      PASS  deployment worker: 1/1 ready
+      FAIL  deployment reporter: 0/1 ready
+      PASS  deployment metrics: 1/1 ready
+      PASS  no pods in CrashLoopBackOff
+      PASS  ServiceAccount debug-lab/reporter can list pods
+      PASS  backend answers on http://backend:8080/healthz
+      PASS  gateway /status reports backend=ok
+      FAIL  reporter /report does not return a pod count
+    2 check(s) failing, 9 passing. Keep digging — every failure is a symptom.
+
+**Cause (fixed part):** the RoleBinding subject in `rbac.yaml` was the `default`
+ServiceAccount, not `reporter`.
+
+**Fix:** subject `name: reporter`. `kubectl auth can-i list pods` now says yes and that check passes.
+
+**Unresolved:** I did not find why `/report` still fails. I do not know the cause.
+
+Ruled out, each with a test:
+
+| Hypothesis | Test | Result |
+|---|---|---|
+| RBAC | `can-i`; fetched the pod list as the reporter's ServiceAccount | allowed, full body |
+| Crash / OOM | pod restarts | 0 restarts |
+| Network path | request from inside the pod network | 200 with a full body |
+| CPU / memory limits | raised to 500m / 256Mi, waited 3+ min | same error; reverted |
+| Pod-list size | scratch namespace, one reporter pod, 7,329 bytes | same error; also fails at 41 KB and 83 KB |
+| Writable volume | emptyDir at /var/cache/app | same error |
+
+Side observation, not evidence: a local mock API returned a 37-byte list (accepted) and
+a 4,082-byte list (failed). The real one-pod list is over 7 KB and the mock may differ from the
+real API, so I do not conclude the app has a size cap.
+
+**How I found it / what I would try next:** the RBAC fix came from `can-i`. For the rest I
+worked down the table above. Next I would capture the app's real request and response with a
+logging proxy, test an older kind node image (mine is v1.34.0), and ask the author

@@ -83,29 +83,52 @@ Checked ReplicaSet events (`kubectl -n debug-lab describe rs`) and compared agai
 
 ---
 
-## Defect 6: `reporter` RBAC RoleBinding bound to `default` ServiceAccount (+ upstream image bug)
+## Defect 6: reporter (partly fixed, one symptom unresolved)
 
 **Symptom:**
-Initially, `ServiceAccount debug-lab/reporter` could not list pods. After fixing RBAC, `deployment/reporter` remained `0/1 Ready` with readiness probe `503 Service Unavailable`, and both `/healthz` and `/report` returned:
+Reporter pod logs (`kubectl logs`):
 
-    {"error":"parse pod list: unexpected end of JSON input","status":"unhealthy"}
+    pod list failed: parse pod list: unexpected end of JSON input
+    GET /healthz -> 503
 
-**Cause:**
-1. **Chart defect:** `broken-chart/templates/rbac.yaml` bound `Role/reporter-read` to `ServiceAccount/default` instead of `ServiceAccount/reporter`.
-2. **Upstream image defect (`eb-debug-app:1.0.1`):** Even with valid RBAC, `eb-debug-app:1.0.1` has a hardcoded response-body read cap below **4,082 bytes** when parsing `GET https://kubernetes.default.svc/api/v1/namespaces/debug-lab/pods?limit=100`. The Kubernetes API returns a valid `HTTP 200` `PodList` of **47,959 bytes**, which the binary truncates mid-JSON.
+The pod stays 0/1 Ready with 0 restarts. `./scenario.sh verify`, run twice on 21 Nov with the same result:
 
-**Fix:**
-1. Updated `broken-chart/templates/rbac.yaml` `RoleBinding` subject from `name: default` to `name: reporter` (`kubectl auth can-i list pods` now passes).
-2. Left `image.repository` and `image.tag` untouched per lab rules; fixing the JSON truncation requires an upstream image fix (raising/removing the response read limit or streaming the JSON decode).
+      PASS  migrate Job completed
+      PASS  deployment backend: 1/1 ready
+      PASS  deployment gateway: 1/1 ready
+      PASS  deployment worker: 1/1 ready
+      FAIL  deployment reporter: 0/1 ready
+      PASS  deployment metrics: 1/1 ready
+      PASS  no pods in CrashLoopBackOff
+      PASS  ServiceAccount debug-lab/reporter can list pods
+      PASS  backend answers on http://backend:8080/healthz
+      PASS  gateway /status reports backend=ok
+      FAIL  reporter /report does not return a pod count
+    2 check(s) failing, 9 passing. Keep digging — every failure is a symptom.
 
-**How I found it:**
-1. Verified `kubectl auth can-i list pods -n debug-lab --as=system:serviceaccount:debug-lab:reporter` and fixed `rbac.yaml`.
-2. Tested `https://kubernetes.default.svc/api/v1/namespaces/debug-lab/pods?limit=100` from an in-cluster `curl` pod using `serviceAccountName: reporter` and `-A "Go-http-client/2.0"` — confirmed `HTTP_CODE:200 SIZE:47959` with valid JSON.
-3. Ruled out HTTP/2 framing (`GODEBUG=http2client=0`), NetworkPolicies, and Service configuration.
-4. Isolated `eb-debug-app:1.0.1` in Docker against a local HTTPS mock `kubernetes.default.svc`: a **37-byte** `PodList` returned `HTTP/1.1 200 OK` (`{"namespace":"debug-lab","pod":"d2f044d14dd2","pods":1}`), while a **4,082-byte** `PodList` immediately reproduced `{"error":"parse pod list: unexpected end of JSON input","status":"unhealthy"}`.
+**Cause (fixed part):** the RoleBinding subject in `rbac.yaml` was the `default`
+ServiceAccount, not `reporter`.
 
----
+**Fix:** subject `name: reporter`. `kubectl auth can-i list pods` now says yes and that check passes.
 
-## Remaining / Unresolved Notes
+**Unresolved:** I did not find why `/report` still fails. I do not know the cause.
 
-`./scenario.sh verify` passes **9/11** checks. The only 2 failing checks (`deployment reporter: 0/1 ready` and `reporter /report does not return a pod count`) are caused by the hardcoded <4 KB response truncation bug in `docker.io/ebinterview/eb-debug-app:1.0.1`, which cannot be resolved without modifying the container image.
+Ruled out, each with a test:
+
+| Hypothesis | Test | Result |
+|---|---|---|
+| RBAC | `can-i`; fetched the pod list as the reporter's ServiceAccount | allowed, full body |
+| Crash / OOM | pod restarts | 0 restarts |
+| Network path | request from inside the pod network | 200 with a full body |
+| CPU / memory limits | raised to 500m / 256Mi, waited 3+ min | same error; reverted |
+| Pod-list size | scratch namespace, one reporter pod, 7,329 bytes | same error; also fails at 41 KB and 83 KB |
+| Writable volume | emptyDir at /var/cache/app | same error |
+
+Side observation, not evidence: a local mock API returned a 37-byte list (accepted) and
+a 4,082-byte list (failed). The real one-pod list is over 7 KB and the mock may differ from the
+real API, so I do not conclude the app has a size cap.
+
+**How I found it / what I would try next:** the RBAC fix came from `can-i`. For the rest I
+worked down the table above. Next I would capture the app's real request and response with a
+logging proxy, test an older kind node image (mine is v1.34.0), and ask the author about
+known issues with eb-debug-app:1.0.1 in reporter mode.
