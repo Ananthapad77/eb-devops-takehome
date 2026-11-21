@@ -6609,4 +6609,37 @@ real API, so I do not conclude the app has a size cap.
 
 **How I found it / what I would try next:** the RBAC fix came from `can-i`. For the rest I
 worked down the table above. Next I would capture the app's real request and response with a
-logging proxy, test an older kind node image (mine is v1.34.0), and ask the author
+logging proxy, test an older kind node image (mine is v1.34.0), and ask the author about
+known issues with eb-debug-app:1.0.1 in reporter mode.
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mcd ~/enterprise-bot-task[27m
+[7mgit add -A && git commit -m "FINDINGS: honest reporter entry" && git push[27m[Acd ~/enterprise-bot-task
+git add -A && git commit -m "FINDINGS: honest reporter entry" && git push
+[?2004l[main 9367c66] FINDINGS: honest reporter entry
+ 2 files changed, 282 insertions(+), 25 deletions(-)
+Enumerating objects: 9, done.
+Counting objects:  11% (1/9)Counting objects:  22% (2/9)Counting objects:  33% (3/9)Counting objects:  44% (4/9)Counting objects:  55% (5/9)Counting objects:  66% (6/9)Counting objects:  77% (7/9)Counting objects:  88% (8/9)Counting objects: 100% (9/9)Counting objects: 100% (9/9), done.
+Delta compression using up to 8 threads
+Compressing objects:  20% (1/5)Compressing objects:  40% (2/5)Compressing objects:  60% (3/5)Compressing objects:  80% (4/5)Compressing objects: 100% (5/5)Compressing objects: 100% (5/5), done.
+Writing objects:  20% (1/5)Writing objects:  40% (2/5)Writing objects:  60% (3/5)Writing objects:  80% (4/5)Writing objects: 100% (5/5)Writing objects: 100% (5/5), 6.25 KiB | 168.00 KiB/s, done.
+Total 5 (delta 3), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas:   0% (0/3)[Kremote: Resolving deltas:  33% (1/3)[Kremote: Resolving deltas:  66% (2/3)[Kremote: Resolving deltas: 100% (3/3)[Kremote: Resolving deltas: 100% (3/3), completed with 3 local objects.[K
+To https://github.com/Ananthapad77/eb-devops-takehome.git
+   3dafa77..9367c66  main -> main
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ [7mgrep -rn -i -E "upstream|hardcoded|TODO" README.md ANSWERS.md lab/FINDINGS.md[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cgrep -rn -i -E "upstream|hardcoded|TODO" README.md ANSWERS.md lab/FINDINGS.md
+[?2004l[35m[KREADME.md[m[K[36m[K:[m[K[32m[K49[m[K[36m[K:[m[Kaffects the node. CPU is low because the service does almost no work. [01;31m[KTODO[m[K: replace with
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K59[m[K[36m[K:[m[K  scan, so the supply chain isn't covered. [01;31m[KTODO[m[K: note if you did the Trivy bonus.
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K80[m[K[36m[K:[m[K- **What for:** [01;31m[KTODO[m[K: adjust this to be true for you. For example: setting up WSL and
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K83[m[K[36m[K:[m[K- **What I had to correct or work around:** [01;31m[KTODO[m[K: write your own list. Real examples so far:
+[35m[KREADME.md[m[K[36m[K:[m[K[32m[K87[m[K[36m[K:[m[K- **What I did myself:** [01;31m[KTODO[m[K: for example, running everything from a clean cluster,
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ [7mcd ~/enterprise-bot-task[27m
+[7mcat > ANSWERS.md <<'EOF'[27m
+[7m# Q1: Migrating ~40 Ingresses from ingress-nginx to Gateway API[27m
+
+[7m**Approach:** run both side by side and move traffic slowly. ingress-nginx stays up as the fallback until the end.[27m
+
+[7m**Order:**[27m
+[7m1. List all 40 Ingresses and note what each one uses: annotations, rewrites, auth, timeouts, TLS, snippets. Pick a Gateway API implementation and check it covers those.[27m
+[7m2. Install the Gateway API CRDs and the new controller next to ingress-nginx, with its own load balancer address.[27m
+[7m3. Convert the least important Ingress first, and test it by calling the new address directly, without changing DNS.[27m
+[7m4. Convert the rest in small batches. Compare the r
