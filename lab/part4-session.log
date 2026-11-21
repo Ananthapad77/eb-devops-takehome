@@ -5768,3 +5768,611 @@ worker-8564664894-lwclq     1/1     Running   0          27m
 exit
 
 Script done on 2026-11-20 16:14:31+00:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-11-21 04:06:18+00:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="209" LINES="51"]
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ [7mcd ~/enterprise-bot-task/lab[27m
+[7m./scenario.sh up[27m
+[7m./scenario.sh verify[27m[A[A]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ cd ~/enterprise-bot-task/lab
+./scenario.sh up
+./scenario.sh verify
+[?2004l==> applying cluster environment (cluster-state/)
+namespace/debug-lab created
+Error from server (NotFound): error when creating "cluster-state/limits.yaml": namespaces "debug-lab" not found
+==> installing the broken chart
+Release "debug-lab" does not exist. Installing it now.
+NAME: debug-lab
+LAST DEPLOYED: Sat Nov 21 04:06:41 2026
+NAMESPACE: debug-lab
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+debug-lab installed into namespace debug-lab.
+
+Goal state:
+  * migrate Job: Completed
+  * backend, gateway, worker, reporter, metrics: all pods Running and 1/1 Ready
+  * gateway /status reports {"self":"ok","backend":"ok",...}
+
+Check your progress at any time:
+  ./scenario.sh verify
+
+Lab is (partially) installed. Investigate with kubectl, fix the chart,
+re-run './scenario.sh up' to apply your fixes, and './scenario.sh verify'
+to check progress.
+==> verifying goal state in namespace debug-lab
+  [31mFAIL[0m  migrate Job has not completed (does it exist? did the chart even install cleanly?)
+  [31mFAIL[0m  deployment backend: 0/1 ready
+  [31mFAIL[0m  deployment gateway: 0/1 ready
+  [31mFAIL[0m  deployment worker: 0/1 ready
+  [31mFAIL[0m  deployment reporter: 0/1 ready
+  [31mFAIL[0m  deployment metrics: 0/1 ready
+  [32mPASS[0m  no pods in CrashLoopBackOff
+  [32mPASS[0m  ServiceAccount debug-lab/reporter can list pods
+  [32mPASS[0m  backend answers on http://backend:8080/healthz
+  [31mFAIL[0m  gateway /status does not report backend=ok
+  [31mFAIL[0m  reporter /report does not return a pod count
+
+[31m8 check(s) failing[0m, 3 passing. Keep digging — every failure is a symptom.
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mcd ~/enterprise-bot-task/lab[27m
+[7mkubectl get pods -n debug-lab[27m
+[7mkubectl get job -n debug-lab[27m
+[7mgit status --short[27m
+[7mgit diff HEAD --stat -- broken-chart/[27m[A[A[A[A]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ cd ~/enterprise-bot-task/lab
+kubectl get pods -n debug-lab
+kubectl get job -n debug-lab
+git status --short
+git diff HEAD --stat -- broken-chart/
+[?2004lNAME                        READY   STATUS      RESTARTS   AGE
+backend-76468847b5-x5vbg    1/1     Running     0          4m19s
+gateway-7f8485d6c6-jz4cv    1/1     Running     0          4m19s
+metrics-57f65b6bc8-d2phz    1/1     Running     0          4m19s
+migrate-gmdcd               0/1     Completed   0          4m19s
+reporter-557c74b8c5-pnk46   0/1     Running     0          4m19s
+worker-8564664894-zmj9t     1/1     Running     0          4m19s
+NAME      STATUS     COMPLETIONS   DURATION   AGE
+migrate   Complete   1/1           26s        4m20s
+[?1h=[K[?1l>[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mkubectl logs -n debug-lab reporter-557c74b8c5-pnk46 --tail=15[27m
+[7mkubectl get --raw "/api/v1/namespaces/debug-lab/pods?limit=100" | wc -c[27m[Akubectl logs -n debug-lab reporter-557c74b8c5-pnk46 --tail=15
+kubectl get --raw "/api/v1/namespaces/debug-lab/pods?limit=100" | wc -c
+[?2004l2026/11/21 04:10:37 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:10:37 GET /healthz -> 503 (from 10.244.0.1:56726)
+2026/11/21 04:10:42 GET /healthz -> 503 (from 10.244.0.1:60182)
+2026/11/21 04:10:47 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:10:47 GET /healthz -> 503 (from 10.244.0.1:60196)
+2026/11/21 04:10:52 GET /healthz -> 503 (from 10.244.0.1:46240)
+2026/11/21 04:10:57 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:10:57 GET /healthz -> 503 (from 10.244.0.1:46246)
+2026/11/21 04:11:02 GET /healthz -> 503 (from 10.244.0.1:33860)
+2026/11/21 04:11:07 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:11:07 GET /healthz -> 503 (from 10.244.0.1:33864)
+2026/11/21 04:11:12 GET /healthz -> 503 (from 10.244.0.1:40246)
+2026/11/21 04:11:17 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:11:17 GET /healthz -> 503 (from 10.244.0.1:40258)
+2026/11/21 04:11:22 GET /healthz -> 503 (from 10.244.0.1:57418)
+41211
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mkubectl get pod -n debug-lab reporter-557c74b8c5-pnk46 -o yaml | sed -n '/spec:/,/status:/p' | head -80[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ckubectl get pod -n debug-lab reporter-557c74b8c5-pnk46 -o yaml | sed -n '/spec:/,/status:/p' | head -80
+[?2004lspec:
+  containers:
+  - env:
+    - name: NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    - name: APP_MODE
+      value: reporter
+    - name: APP_NAME
+      value: reporter
+    - name: PORT
+      value: "8080"
+    - name: VERSION
+      value: 2.0.0
+    image: docker.io/ebinterview/eb-debug-app:1.0.1
+    imagePullPolicy: IfNotPresent
+    name: reporter
+    ports:
+    - containerPort: 8080
+      name: http
+      protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /healthz
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 3
+      periodSeconds: 5
+      successThreshold: 1
+      timeoutSeconds: 3
+    resources:
+      limits:
+        cpu: 200m
+        memory: 128Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+      runAsUser: 65532
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-wggmp
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: demo-control-plane
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: reporter
+  serviceAccountName: reporter
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-wggmp
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mcd ~/enterprise-bot-task/lab[27m
+[7mkubectl create ns scratch[27m
+[7mhelm template debug-lab ./broken-chart -n scratch -s templates/rbac.yaml | kubectl apply -n scratch -f -[27m
+[7mhelm template debug-lab ./broken-chart -n scratch -s templates/reporter.yaml | kubectl apply -n scratch -f -[27m
+[7msleep 40[27m
+[7mkubectl get pods -n scratch[27m
+[7mkubectl get --raw "/api/v1/namespaces/scratch/pods?limit=100" | wc -c[27m
+[7mkubectl logs -n scratch deploy/reporter --tail=5[27m[A[A[A[A[A[A[Acd ~/enterprise-bot-task/lab
+kubectl create ns scratch
+helm template debug-lab ./broken-chart -n scratch -s templates/rbac.yaml | kubectl apply -n scratch -f -
+helm template debug-lab ./broken-chart -n scratch -s templates/reporter.yaml | kubectl apply -n scratch -f -
+sleep 40
+kubectl get pods -n scratch
+kubectl get --raw "/api/v1/namespaces/scratch/pods?limit=100" | wc -c
+kubectl logs -n scratch deploy/reporter --tail=5
+[?2004lnamespace/scratch created
+serviceaccount/reporter created
+role.rbac.authorization.k8s.io/reporter-read created
+rolebinding.rbac.authorization.k8s.io/reporter-read created
+service/reporter created
+deployment.apps/reporter created
+NAME                        READY   STATUS    RESTARTS   AGE
+reporter-557c74b8c5-z5p6r   0/1     Running   0          41s
+7329
+2026/11/21 04:13:04 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:13:04 GET /healthz -> 503 (from 10.244.0.1:54508)
+2026/11/21 04:13:09 GET /healthz -> 503 (from 10.244.0.1:54518)
+2026/11/21 04:13:14 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:13:14 GET /healthz -> 503 (from 10.244.0.1:59656)
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mdocker pull docker.io/ebinterview/eb-debug-app:1.0.1[27m
+[7mid=$(docker create docker.io/ebinterview/eb-debug-app:1.0.1)[27m
+[7mdocker cp $id:/app ./eb-app-extract 2>&1 | head -3; docker export $id | tar -t | head -30[27m
+[7mdocker rm $id[27m[A[A[A]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ docker pull docker.io/ebinterview/eb-debug-app:1.0.1
+id=$(docker create docker.io/ebinterview/eb-debug-app:1.0.1)
+docker cp $id:/app ./eb-app-extract 2>&1 | head -3; docker export $id | tar -t | head -30
+docker rm $id
+[?2004l1.0.1: Pulling from ebinterview/eb-debug-app
+Digest: sha256:17f41698c10f5c18693339281b92d3cfef16d9fcffcad440a24e7ab19e05c443
+Status: Image is up to date for ebinterview/eb-debug-app:1.0.1
+docker.io/ebinterview/eb-debug-app:1.0.1
+Error response from daemon: Could not find the file /app in container d480d2492059dfb4fd495810ea9d966eba6523e982204cf13379f6850c386119
+.dockerenv
+bin/
+boot/
+dev/
+dev/console
+dev/pts/
+dev/shm/
+eb-debug-app
+etc/
+etc/debian_version
+etc/default/
+etc/dpkg/
+etc/dpkg/origins/
+etc/dpkg/origins/debian
+etc/ethertypes
+etc/group
+etc/host.conf
+etc/hostname
+etc/hosts
+etc/issue
+etc/issue.net
+etc/mime.types
+etc/mtab
+etc/nsswitch.conf
+etc/os-release
+etc/passwd
+etc/profile.d/
+etc/protocols
+etc/resolv.conf
+etc/rpc
+d480d2492059dfb4fd495810ea9d966eba6523e982204cf13379f6850c386119
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mid=$(docker create docker.io/ebinterview/eb-debug-app:1.0.1)[27m
+[7mdocker cp $id:/eb-debug-app /tmp/eb-debug-app[27m
+[7mdocker rm $id[27m
+[7mfile /tmp/eb-debug-app[27m
+[7mstrings /tmp/eb-debug-app | grep -E '^[A-Z][A-Z0-9_]{3,}$' | sort -u | head -60[27m
+[7mstrings /tmp/eb-debug-app | grep -i -E 'labelSelector|fieldSelector|limit=|/api/v1/namespaces|MAX|LIMIT|SELECTOR|PAGE' | head -30[27m[A[A[A[A[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cid=$(docker create docker.io/ebinterview/eb-debug-app:1.0.1)
+docker cp $id:/eb-debug-app /tmp/eb-debug-app
+docker rm $id
+file /tmp/eb-debug-app
+strings /tmp/eb-debug-app | grep -E '^[A-Z][A-Z0-9_]{3,}$' | sort -u | head -60
+strings /tmp/eb-debug-app | grep -i -E 'labelSelector|fieldSelector|limit=|/api/v1/namespaces|MAX|LIMIT|SELECTOR|PAGE' | head -30
+[?2004lSuccessfully copied 5.85MB (transferred 5.85MB) to /tmp/eb-debug-app
+e5c0d527b24b8f16849352ee984220b738e3abfbe3319b8cef771cf31f427c40
+/tmp/eb-debug-app: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=S1hFJ5HocIwNKZu9Lzbc/5FGGlrcFUAme2_8vOC05/E_7ZCBnj7RkP8evN92-b/mJCqiUJgWT-PxOohQSFS, stripped
+A1I1Q1Y1
+A2VH
+A3Z0
+A3Z8
+AAAA
+AEADID
+AECI
+AIFF
+B0H9
+B8H9
+BFBN
+BHH9
+BNAW
+BPA2
+BPL9
+BWQP
+BXAGB
+BXH9
+C0H9
+C2NGM
+C2Q1D2O1
+C6DN
+C7HSY
+CE03
+CERTIFIC
+CNAM
+CPBQ
+D9BX
+DAX1
+DH9Z
+DOWNGRD
+E9NF
+ECDH
+EDDDDDDAAAADDEEE
+EDDDDDDHDDDED
+EHH1
+EPH1
+EXH1
+FBJB
+FORM
+G0H1
+G0I1
+G5_V
+GPH1
+GPM1
+GSHX
+GXH1
+GXI1
+H0H9
+H13H
+H18K1
+H3W8L1
+H8H9K8
+H951
+H95A
+H9GP
+H9H8
+H9J8
+H9P0
+H9PH
+:max-
+limit
+Limit
+maxpc
+isMax
+MaxAge
+npages
+maxSize
+	readLimit
+	maxStrLen
+MaxVersion
+MaxPathLen
+gomaxprocs
+setMaxSize
+maxReadSize
+MaxHandlers
+maxStreamID
+maxEarlyData
+maxWriteSize
+hitReadLimit
+setReadLimit
+maxFrameSize
+MaxIdleConns
+limiterEvent
+maxSizeLimit
+MaxNameLength
+advMaxStreams
+maxTableIndex
+MaxPathLenZero
+MaxHeaderBytes
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mcd /tmp[27m
+[7mstrings -n 4 eb-debug-app | grep -n -E 'pod list|parse pod|APP_MODE|NAMESPACE|APP_NAME|/report|/healthz|/status|serviceaccount|KUBERNETES_SERVICE' | head -40[27m[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccd /tmp
+strings -n 4 eb-debug-app | grep -n -E 'pod list|parse pod|APP_MODE|NAMESPACE|APP_NAME|/report|/healthz|/status|serviceaccount|KUBERNETES_SERVICE' | head -40
+[?2004l57436: m=nil base rdtscppopcntnetdnsdomaingophertelnetlisten.onionndots:ip+netsocketsecretSTREETuint16uint32uint64structchan<-<-chanCommonAcceptServercmd/goavx512rdrandrdseedheaderAnswerLengthVERSIONversionbackenderror: Bearer /status/reportnil keytls3desderivedInitialEd25519MD5-RSAserial:number float32float64UpgradeTrailersocks5hHEADERSReferer flags= len=%d (conn) %v=%v,expiresrefererrefreshtrailerGODEBUGname %q:method:schemeupgrade:statushttp://chunkednosniffCreatedIM UsedCONNECT19531259765625abortedstoppedsignal TuesdayJanuaryOctoberSHA-224SHA-256SHA-384SHA-512forcegcallocmWcpuprofallocmRunknowngctraceIO waitrunningsyscallwaitingforevernetworkUNKNOWN:events, goid= s=nil
+57437: (scan  MB in pacer: % CPU ( zombie, j0 = head = ,errno=panic:  nmsys= locks= dying= allocsrax    rbx    rcx    rdx    rdi    rsi    rbp    rsp    r8     r9     r10    r11    r12    r13    r14    r15    rip    rflags cs     fs     gs     Signal  m->g0= pad1=  pad2=  text= minpc= 	value= (scan)	types : type avx512fconnectlookup writetoeae_prk2.5.4.62.5.4.32.5.4.52.5.4.72.5.4.82.5.4.9invaliduintptrChanDir Value>ConvertExpiresSubjectcharsetaccept4os/execruntimeamxtileamxint8amxbf16osxsaveanswersAPP_NAMEAPP_MODE/healthztlskyberCurveID(finishedexporterSHA1-RSADSA-SHA1x509sha1DNS nameGoStringfont/ttffont/otfhijackedNO_ERRORPRIORITYSETTINGSLocation data=%q incr=%v ping=%qif-matchlocationhttp/1.1bad_flowprioritybad_pathHTTP/2.0%s_%s_%sdisjointoverlapsHTTP/1.1no-cacheContinueAcceptedConflictreadlinksendfile48828125infinitystrconv.parsing ParseIntnil Poolno anodeThursdaySaturdayFebruaryNovemberDecember%!Month(MD5+SHA1SHA3-224SHA3-256SHA3-384SHA3-512scavengepollDesctraceBufdeadlockraceFinipanicnilcgocheckrunnable is not  pointer, errno= packed=BAD RANK status unknown(trigger= npages= nalloc= nfreed=) errno=[signal  newval= mcount= bytes, 
+57439: stack=[ minLC=  maxpc= 	stack=[ minutes status= etypes avx512bwavx512vlnetedns0[::1]:53shutdowninvalid address raw-readreadfromunixgram2.5.4.102.5.4.112.5.4.17Receivedif-rangeNO_PROXYno_proxygo/typesnet/httpgo/buildavx512cdavx512eravx512pfavx512dqClassANYQuestionunhealthyheartbeatNAMESPACEnamespaceCACHE_DIRtlsrsakex%s %x %x
+57458:sigaction failedGODEBUG: value "hostLookupOrder=/etc/resolv.confnon-IPv4 addressnon-IPv6 addressunknown network no colon on linelength too largedivision by zeroContent-LanguageWww-Authenticateinvalid encodingallowmultiplevcsavx512vpclmulqdqinvalid dns nameRCodeFormatErrorunpacking headershutdown completedecryption failedhandshake failureillegal parametermissing extensionunrecognized name/etc/ssl/cert.peminvalid BMPStringinvalid IA5Stringreflect.Value.Intin string literal0123456789ABCDEFX0123456789abcdefxinvalid stream IDTransfer-EncodingHEADER_TABLE_SIZECOMPRESSION_ERRORENHANCE_YOUR_CALMHTTP_1_1_REQUIREDIf-Modified-Sinceframe_ping_lengthtruncated headersif-modified-sincetransfer-encodingx-forwarded-protobogus greeting %qreset_idle_streaminvalid method %qX-Idempotency-Keyhttp: nil handlerMoved PermanentlyFailed DependencyToo Many Requestspidfd_send_signal1192092895507812559604644775390625invalid bit size exec format errorpermission deniedno data availablewrong medium typecorrupt zip file fractional secondreflect: call of reflect.Value.Lengoroutine profileAllThreadsSyscallGC assist markingselect (no cases)sync.RWMutex.Lockwait for GC cycletrace proc statusSIGINT: interruptSIGBUS: bus errorSIGCONT: continuesync.(*Cond).Wait: missing method notetsleepg on g0bad TinySizeClasskey align too bigruntime: pointer g already scannedmark - bad statusscanobject n == 0swept cached spanmarkBits overflowruntime: summary[runtime: level = , p.searchAddr = futexwakeup addr=, 0, {interval: {ns}}, nil) errno=results: got {r1=runtime/internal/internal/runtime/thread exhaustionlocked m0 woke upentersyscallblock spinningthreads=gp.waiting != nilunknown caller pcstack: frame={sp:runtime: nameOff runtime: typeOff runtime: textOff 060102150405Z0700integer too large%%!%c(big.Int=%s)unknown type kindreflect: New(nil)multipartmaxpartsmessage too large from a write of winreadlinkvolumeheartbeat is staleparse pod list: %wmigration completecontext.Backgroundunexpected messageexport restrictionx509negativeserial/etc/pki/tls/certsreflect.Value.Uintexceeded max depthinvalid character in numeric literalhttp: blank cookiereceived from peerapplication/x-gzipFLOW_CONTROL_ERRORProxy-Authenticate404 page not foundframe_goaway_shortproxy-authenticateUNKNOWN_SETTING_%dconnection is idleunexpected type %Ttrailers_not_endedGo-http-client/2.0Go-http-client/1.1connection refusedTemporary RedirectPermanent RedirectMethod Not AllowedExpectation Failedbad Content-Lengthfield value for %qvalue out of range298023223876953125input/output errorno child processesfile name too longno locks availableidentifier removedmultihop attemptedRFS specific errorstreams pipe erroroperation canceledsegmentation fault: day out of rangeTime.MarshalJSON: Time.MarshalText: unknown time zone adaptivestackstartdontfreezetheworldtraceadvanceperiodtracebackancestorsgarbage collectionsync.RWMutex.RLockGC worker (active)stopping the worldwait until GC endsbad lfnode addresssystem page size (elem align too big  but memory size /gc/pauses:seconds because dotdotdotruntime: npages = invalid skip valueruntime: range = {index out of rangeruntime:   gp: gp=runtime: getg:  g=forEachP: not done in async preempt
+57460:, locked to threadserver misbehavinginvalid IP address/etc/nsswitch.confinvalid criteria: unsupported KDF idunsupported KEM idnon-minimal lengthtruncated sequencesequence truncatedcannot be negativeunable to parse IPreflect.Value.Elemreflect.Value.Typereflect: Zero(nil)bufio: buffer fulldecoding error: %vuse of closed fileRCodeServerFailurepod list failed: %vrevoked certificateexpired certificateunknown certificateunknown cipher typex509: malformed OIDx509: trailing datax509: unknown errorreflect.Value.IsNilreflect.Value.Floatafter array elementclient disconnectedhttp: Server closedINITIAL_WINDOW_SIZEINADEQUATE_SECURITYProxy-Authorizationframe_data_stream_0 (%d bytes omitted)content-dispositionif-unmodified-sinceproxy-authorizationerr must be non-nilTLS version too lowflow_on_data_lengthheaders_half_closedvalue for header %qhost/path missing /non-nil leaf fieldsinvalid header namenetwork unreachableSwitching ProtocolsPrecondition FailedMisdirected RequestService UnavailableConnection: close
+57489:traceStopReadCPU called with trace enabledattempted to trace a bad status for a proccrypto/sha1: invalid hash state identifierpoly1305: write to MAC after Sum or VerifyPrintableString contains invalid characterMapIter.Value called on exhausted iteratorreflect: cannot convert slice with length internal error: call to runtimeSource.Seedinsufficient data for resource body lengthreadiness failed: backend not reachable: %vtls: received unexpected key update messagetls: server did not select an ALPN protocoltls: server sent unrequested session tickettls: received malformed key_share extensiontls: invalid early data for QUIC connectionx509: failed to parse dnsName constraint %qmultiple Read calls return no data or errornet/http: timeout awaiting response headerstimeout waiting for SETTINGS frames from %vhttp2: server closing client connection: %vhttp2: unexpected ALPN protocol %q; want %qTransport: unhandled response frame type %Thttp2: too many 1xx informational responsesError enabling Transport HTTP/2 support: %vmult64bitPow10: power of 10 is out of rangeinterrupted system call should be restartedreflect: nil type passed to Type.Implementsruntime: opened unexpected file descriptor /memory/classes/metadata/mcache/inuse:bytesruntime.SetFinalizer: first argument is nilruntime.SetFinalizer: finalizer already setgcBgMarkWorker: unexpected gcMarkWorkerModenon in-use span found with specials bit setgrew heap, but no adequate free space foundroot level max pages doesn't fit in summaryruntime.Pinner: argument is not a pointer: runtime: releaseSudog with non-nil gp.paramunknown runnable goroutine during bootstrapruntime: casfrom_Gscanstatus bad oldval gp=runtime:stoplockedm: lockedg (atomicstatus=methodValueCallFrameObjs is not in a moduleexplicit time type given to non-time memberbufio: tried to rewind past start of bufferchunked encoding contains too much non-dataedwards25519: invalid point encoding lengthtls: server's Finished message was incorrecttls: server sent an incorrect legacy versiontls: unexpected ECH extension in serverHellox509: invalid RDNSequence: invalid attributex509: internal error: cannot parse domain %qcrypto/x509: error fetching intermediate: %whttp: putIdleConn: too many idle connectionsconnection exceeded flow control window sizehttp2: could not negotiate protocol mutuallyhttp2: invalid Connection request header: %qhttp: Request.ContentLength=%d with nil Bodymult128bitPow10: power of 10 is out of range using value obtained using unexported fieldspan on userArena.faultList has invalid sizeruntime: lfstack.push invalid packing: node=out of memory allocating heap arena metadataruntime: cannot remap pages in address space/cpu/classes/scavenge/background:cpu-secondsruntime: unexpected metric registration for gcmarknewobject called while doing checkmarkactive sweepers found at start of mark phaseno P available, write barriers are forbiddencannot trace user goroutine on its own stackunsafe.Slice: ptr is nil and len is not zerocipher: NewGCM requires 128-bit block ciphercrypto/sha256: invalid hash state identifiercrypto/sha512: invalid hash state identifierreflect: funcLayout with interface receiver reflect: slice length out of range in SetLenencoding alphabet contains newline characterencoding alphabet includes duplicate symbolsmime: unexpected content after media subtypeinsufficient data for calculated length type/var/run/secrets/kubernetes.io/serviceaccountcontext: internal error: missing cancel errortls: internal error: unexpected renegotiationx509: IP constraint contained invalid mask %xx509: certificate signed by unknown authorityjson.RawMessage: UnmarshalJSON on nil pointerhttp: putIdleConn: connection is in bad statehttp: no Client.Transport or DefaultTransportinvalid request :path %q from URL.Opaque = %qunbuffered done channel passed in for type %THTTP/1.1 %d %s%sUnsupported transfer encodingnet/http: internal error: connCount underflowcannot send after transport endpoint shutdownreflect: nil type passed to Type.AssignableTocrypto/rsa: message too long for RSA key sizetransitioning GC to the same state as before?produced a trigger greater than the heap goaltried to run scavenger from another goroutineruntime: failed mSpanList.remove span.npages=exitsyscall: syscall frame is no longer validunsafe.String: ptr is nil and len is not zerozero length explicit tag was not an asn1.Flagmath/big: cannot unmarshal %q into a *big.Intreflect: internal error: invalid method indexbufio.Scanner: Read returned impossible countw must be at least 2 by the definition of NAFparsing/packing of this section has completedPSSWithSHA256PSSWithSHA384PSSWithSHA512Ed25519tls: server chose an unconfigured cipher suitetls: failed to parse certificate from server: tls: server did not echo the legacy session IDtls: server accepted 0-RTT with the wrong ALPNtls: received new session ticket from a clientx509: failed to unmarshal elliptic curve pointx509: failed to parse rfc822Name constraint %qx509: malformed signature algorithm identifierGOAWAY close timer fired; closing conn from %vinternal error: cannot create stream with id 0http2: Transport creating client conn %p to %vprotocol error: received DATA after END_STREAMclient sent an HTTP request to an HTTPS servernet/http: internal error: misuse of tryDelivernet/http: too many 1xx informational responsesTime.UnmarshalJSON: input is not a JSON stringbytes.Reader.UnreadByte: at beginning of sliceed25519: internal error: setting scalar failedslice bounds out of range [:%x] with length %ypanicwrap: unexpected string after type name: memory reservation exceeds address space limittried to park scavenger from another goroutinereleased less than one physical page of memory (bad use of unsafe.Pointer? try -d=checkptr)
+57494:tried to trace goroutine with invalid or unsupported statuscrypto/ecdh: private key and public key curves do not matchreflect: reflect.Value.Elem on an invalid notinheap pointerbufio.Scanner: SplitFunc returns advance count beyond inputcannot determine namespace (set NAMESPACE or run in-cluster)tls: no supported versions satisfy MinVersion and MaxVersiontls: initial handshake had non-empty renegotiation extensiontls: server resumed a session with a different EMS extension (Client.Timeout or context cancellation while reading body)internal error: attempt to send frame on a closed stream: %vmalformed response from server: missing status pseudo headernet/http: server response headers exceeded %d bytes; abortedmanual span allocation called with non-manually-managed typeaddr range base and limit are not in the same memory segmentruntime: failed to configure profiling timer; timer_settime(runtime: malformed profBuf buffer - tag and data out of syncreflect: call of reflect.Value.Len on ptr to non-array Valuetls: unsupported certificate: private key is %T, expected *%Ttls: EncryptedClientHelloConfigList contains no valid configstls: server sent a ServerHello extension forbidden in TLS 1.3x509: failed to parse URI constraint %q: cannot be IP addressruntime: may need to increase max user processes (ulimit -u)
+57500:embedded IPv4 address must replace the final 2 fields of the addressreflect: reflect.Value.UnsafePointer on an invalid notinheap pointertls: peer doesn't support the certificate custom signature algorithmstls: handshake message of length %d bytes exceeds maximum of %d byteshttp2: Transport closing idle conn %p (forSingleUse=%v, maxStream=%v)%s matches more methods than %s, but has a more specific path pattern%s matches fewer methods than %s, but has a more general path patternruntime.Pinner: found leaking pinned pointer; forgot to call Unpin()?too many hex fields to fit an embedded IPv4 at the end of the addressinternal/concurrent.HashMapTrie: ran out of hash bits while iteratinginternal/concurrent.HashMapTrie: ran out of hash bits while insertingedwards25519: internal error: setShortBytes called with a long stringx509: certificate relies on legacy Common Name field, use SANs insteadgot %s for stream %d; expected CONTINUATION following %s for stream %dbytes.Buffer: UnreadByte: previous operation was not a successful readtls: peer doesn't support any of the certificate's signature algorithmsx509: issuer has name constraints but leaf doesn't have a SAN extensionjson: invalid use of ,string struct tag, trying to unmarshal %q into %vinternal error: attempt to send frame on a half-closed-local stream: %vrange function recovered a loop body panic and did not resume panickingdynamic table size update MUST occur at the beginning of a header blocktoo many concurrent operations on a single file or socket (max 1048575)eb-debug-app %s: migration starting (app=%s, %ds of very important work)tls: server's certificate contains an unsupported type of public key: %Tcrypto/ecdh: internal error: nistec ScalarBaseMult returned the identitytls: received unexpected handshake message of type %T when waiting for %Ttls: internal error: handshake returned an error but is marked successfultls: certificate RSA key size too small for supported signature algorithmsmalformed response from server: malformed non-numeric status pseudo headernet/http: server replied with more than declared Content-Length; truncatedFATAL: unknown APP_MODE %q (want api, gateway, worker, reporter or migrate)tls: internal error: attempted to read record with pending application dataUnsolicited response received on idle HTTP channel starting with %q; err=%vtls: failed to send closeNotify alert (but connection was closed anyway): %wtls: server certificate contains incorrect key type for selected ciphersuiteHTTP/1.0 400 Bad Request
+67836:net/http/status.go
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mstrings -n 4 eb-debug-app > /tmp/eb-strings.txt[27m
+[7mgrep -n 'APP_MODE' /tmp/eb-strings.txt[27m
+[7m# then, with N = that line number:[27m
+[7msed -n "$((N-40)),$((N+40))p" /tmp/eb-strings.txt[27m[A[A[Astrings -n 4 eb-debug-app > /tmp/eb-strings.txt
+grep -n 'APP_MODE' /tmp/eb-strings.txt
+# then, with N = that line number:
+sed -n "$((N-40)),$((N+40))p" /tmp/eb-strings.txt
+[?2004l[32m[K57437[m[K[36m[K:[m[K (scan  MB in pacer: % CPU ( zombie, j0 = head = ,errno=panic:  nmsys= locks= dying= allocsrax    rbx    rcx    rdx    rdi    rsi    rbp    rsp    r8     r9     r10    r11    r12    r13    r14    r15    rip    rflags cs     fs     gs     Signal  m->g0= pad1=  pad2=  text= minpc= 	value= (scan)	types : type avx512fconnectlookup writetoeae_prk2.5.4.62.5.4.32.5.4.52.5.4.72.5.4.82.5.4.9invaliduintptrChanDir Value>ConvertExpiresSubjectcharsetaccept4os/execruntimeamxtileamxint8amxbf16osxsaveanswersAPP_NAME[01;31m[KAPP_MODE[m[K/healthztlskyberCurveID(finishedexporterSHA1-RSADSA-SHA1x509sha1DNS nameGoStringfont/ttffont/otfhijackedNO_ERRORPRIORITYSETTINGSLocation data=%q incr=%v ping=%qif-matchlocationhttp/1.1bad_flowprioritybad_pathHTTP/2.0%s_%s_%sdisjointoverlapsHTTP/1.1no-cacheContinueAcceptedConflictreadlinksendfile48828125infinitystrconv.parsing ParseIntnil Poolno anodeThursdaySaturdayFebruaryNovemberDecember%!Month(MD5+SHA1SHA3-224SHA3-256SHA3-384SHA3-512scavengepollDesctraceBufdeadlockraceFinipanicnilcgocheckrunnable is not  pointer, errno= packed=BAD RANK status unknown(trigger= npages= nalloc= nfreed=) errno=[signal  newval= mcount= bytes, 
+[32m[K57500[m[K[36m[K:[m[Kembedded IPv4 address must replace the final 2 fields of the addressreflect: reflect.Value.UnsafePointer on an invalid notinheap pointertls: peer doesn't support the certificate custom signature algorithmstls: handshake message of length %d bytes exceeds maximum of %d byteshttp2: Transport closing idle conn %p (forSingleUse=%v, maxStream=%v)%s matches more methods than %s, but has a more specific path pattern%s matches fewer methods than %s, but has a more general path patternruntime.Pinner: found leaking pinned pointer; forgot to call Unpin()?too many hex fields to fit an embedded IPv4 at the end of the addressinternal/concurrent.HashMapTrie: ran out of hash bits while iteratinginternal/concurrent.HashMapTrie: ran out of hash bits while insertingedwards25519: internal error: setShortBytes called with a long stringx509: certificate relies on legacy Common Name field, use SANs insteadgot %s for stream %d; expected CONTINUATION following %s for stream %dbytes.Buffer: UnreadByte: previous operation was not a successful readtls: peer doesn't support any of the certificate's signature algorithmsx509: issuer has name constraints but leaf doesn't have a SAN extensionjson: invalid use of ,string struct tag, trying to unmarshal %q into %vinternal error: attempt to send frame on a half-closed-local stream: %vrange function recovered a loop body panic and did not resume panickingdynamic table size update MUST occur at the beginning of a header blocktoo many concurrent operations on a single file or socket (max 1048575)eb-debug-app %s: migration starting (app=%s, %ds of very important work)tls: server's certificate contains an unsupported type of public key: %Tcrypto/ecdh: internal error: nistec ScalarBaseMult returned the identitytls: received unexpected handshake message of type %T when waiting for %Ttls: internal error: handshake returned an error but is marked successfultls: certificate RSA key size too small for supported signature algorithmsmalformed response from server: malformed non-numeric status pseudo headernet/http: server replied with more than declared Content-Length; truncatedFATAL: unknown [01;31m[KAPP_MODE[m[K %q (want api, gateway, worker, reporter or migrate)tls: internal error: attempted to read record with pending application dataUnsolicited response received on idle HTTP channel starting with %q; err=%vtls: failed to send closeNotify alert (but connection was closed anyway): %wtls: server certificate contains incorrect key type for selected ciphersuiteHTTP/1.0 400 Bad Request
+sed: invalid option -- '4'
+Usage: sed [OPTION]... {script-only-if-no-other-script} [input-file]...
+
+  -n, --quiet, --silent
+                 suppress automatic printing of pattern space
+      --debug
+                 annotate program execution
+  -e script, --expression=script
+                 add the script to the commands to be executed
+  -f script-file, --file=script-file
+                 add the contents of script-file to the commands to be executed
+  --follow-symlinks
+                 follow symlinks when processing in place
+  -i[SUFFIX], --in-place[=SUFFIX]
+                 edit files in place (makes backup if SUFFIX supplied)
+  -l N, --line-length=N
+                 specify the desired line-wrap length for the `l' command
+  --posix
+                 disable all GNU extensions.
+  -E, -r, --regexp-extended
+                 use extended regular expressions in the script
+                 (for portability use POSIX -E).
+  -s, --separate
+                 consider files as separate rather than as a single,
+                 continuous long stream.
+      --sandbox
+                 operate in sandbox mode (disable e/r/w commands).
+  -u, --unbuffered
+                 load minimal amounts of data from the input files and flush
+                 the output buffers more often
+  -z, --null-data
+                 separate lines by NUL characters
+      --help     display this help and exit
+      --version  output version information and exit
+
+If no -e, --expression, -f, or --file option is given, then the first
+non-option argument is taken as the sed script to interpret.  All
+remaining arguments are names of input files; if no input files are
+specified, then the standard input is read.
+
+GNU sed home page: <https://www.gnu.org/software/sed/>.
+General help using GNU software: <https://www.gnu.org/gethelp/>.
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mdocker run --rm -d --name rep-test -e APP_MODE=reporter -e PORT=8080 -e NAMESPACE=x -e APP_NAME=r -e VERSION=1 \[27m
+[7m  -e KUBERNETES_SERVICE_HOST=host.docker.internal -e KUBERNETES_SERVICE_PORT=9999 \[27m
+[7m  --add-host host.docker.internal:host-gateway docker.io/ebinterview/eb-debug-app:1.0.1[27m
+[7mdocker logs rep-test 2>&1 | head[27m[A[A[Adocker run --rm -d --name rep-test -e APP_MODE=reporter -e PORT=8080 -e NAMESPACE=x -e APP_NAME=r -e VERSION=1 \
+  -e KUBERNETES_SERVICE_HOST=host.docker.internal -e KUBERNETES_SERVICE_PORT=9999 \
+  --add-host host.docker.internal:host-gateway docker.io/ebinterview/eb-debug-app:1.0.1
+docker logs rep-test 2>&1 | head
+[?2004l69125142c97305f2b761bed48a85c2a7b297253346f04dd1ddaea015b2896e1d
+2026/11/21 04:16:12 eb-debug-app 1 starting: mode=reporter pod=69125142c973 listening on :8080 (image default is 8081; set PORT to override)
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mkubectl -n scratch patch deploy reporter --type=json -p '[[27m
+[7m {"op":"add","path":"/spec/template/spec/volumes","value":[{"name":"cache","emptyDir":{}}]},[27m
+[7m {"op":"add","path":"/spec/template/spec/containers/0/volumeMounts","value":[{"name":"cache","mountPath":"/var/cache/app"}]}]'[27m
+[7msleep 30[27m
+[7mkubectl get pods -n scratch[27m
+[7mkubectl logs -n scratch deploy/reporter --tail=5[27m[A[A[A[A[Akubectl -n scratch patch deploy reporter --type=json -p '[
+ {"op":"add","path":"/spec/template/spec/volumes","value":[{"name":"cache","emptyDir":{}}]},
+ {"op":"add","path":"/spec/template/spec/containers/0/volumeMounts","value":[{"name":"cache","mountPath":"/var/cache/app"}]}]'
+sleep 30
+kubectl get pods -n scratch
+kubectl logs -n scratch deploy/reporter --tail=5
+[?2004ldeployment.apps/reporter patched
+NAME                        READY   STATUS    RESTARTS   AGE
+reporter-557c74b8c5-z5p6r   0/1     Running   0          6m17s
+reporter-8ddcf4c9d-8mtcl    0/1     Running   0          32s
+Found 2 pods, using pod/reporter-557c74b8c5-z5p6r
+2026/11/21 04:18:40 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:18:40 GET /healthz -> 503 (from 10.244.0.1:35990)
+2026/11/21 04:18:45 GET /healthz -> 503 (from 10.244.0.1:58938)
+2026/11/21 04:18:50 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:18:50 GET /healthz -> 503 (from 10.244.0.1:58948)
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mstrings /tmp/eb-debug-app | grep -o -E '.{0,80}(CACHE_DIR|/var/cache|/tmp/).{0,80}' | head[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstrings /tmp/eb-debug-app | grep -o -E '.{0,80}(CACHE_DIR|/var/cache|/tmp/).{0,80}' | head
+[?2004l12cdavx512eravx512pfavx512dqClassANYQuestionunhealthyheartbeatNAMESPACEnamespaceCACHE_DIRtlsrsakex%s %x %x
+installgoroothtml/templatename too longnot availableno such path: last_heartbeat/var/cache/app.WithoutCancel.WithDeadline(bad record MACinternal error/etc/ssl/certsunexpe
+ the process needs a writable directory at %s (mount a volume there, or set CACHE_DIR)HTTP/1.1 431 Request Header Fields Too Large
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mkubectl logs -n scratch reporter-8ddcf4c9d-8mtcl --tail=8[27m
+[7mkubectl exec -n scratch reporter-8ddcf4c9d-8mtcl -- ls /var/cache/app 2>&1 | head -2   # likely no shell; skip if it errors[27m[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ckubectl logs -n scratch reporter-8ddcf4c9d-8mtcl --tail=8
+kubectl exec -n scratch reporter-8ddcf4c9d-8mtcl -- ls /var/cache/app 2>&1 | head -2   # likely no shell; skip if it errors
+[?2004l2026/11/21 04:20:13 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:20:13 GET /healthz -> 503 (from 10.244.0.1:41316)
+2026/11/21 04:20:18 GET /healthz -> 503 (from 10.244.0.1:41328)
+2026/11/21 04:20:23 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:20:23 GET /healthz -> 503 (from 10.244.0.1:49128)
+2026/11/21 04:20:28 GET /healthz -> 503 (from 10.244.0.1:49132)
+2026/11/21 04:20:33 pod list failed: parse pod list: unexpected end of JSON input
+2026/11/21 04:20:33 GET /healthz -> 503 (from 10.244.0.1:41762)
+error: Internal error occurred: Internal error occurred: error executing command in container: failed to exec in container: failed to start exec "6c3e4044b98423181f94c0490dbaa5e1ad07f4d13075ac9e4717ac30f6a7b567": OCI runtime exec failed: exec failed: unable to start container process: exec: "ls": executable file not found in $PATH
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7msleep 15; docker logs rep-test 2>&1 | tail -5[27m
+[7mdocker rm -f rep-test[27m[A]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ sleep 15; docker logs rep-test 2>&1 | tail -5
+docker rm -f rep-test
+[?2004l2026/11/21 04:16:12 eb-debug-app 1 starting: mode=reporter pod=69125142c973 listening on :8080 (image default is 8081; set PORT to override)
+rep-test
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mls -la[27m
+[7mtest -x setup.sh && echo "setup.sh executable"[27m
+[7mls service chart lab lab/broken-chart lab/cluster-state[27m
+[7mls README.md ANSWERS.md lab/FINDINGS.md lab/scenario.sh lab/part4-session.log[27m[A[A[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cls -la
+test -x setup.sh && echo "setup.sh executable"
+ls service chart lab lab/broken-chart lab/cluster-state
+ls README.md ANSWERS.md lab/FINDINGS.md lab/scenario.sh lab/part4-session.log
+[?2004ltotal 6484
+drwxrwxrwt  8 root root     240 Nov 21 04:16 [0m[30;42m.[0m
+drwxr-xr-x 25 root root    4096 Nov 21 02:14 [01;34m..[0m
+drwxrwxrwx  2 root root      60 Nov 21 02:14 [34;42m.X11-unix[0m
+-rwxr-xr-x  1 user user 5849240 Jul 31 08:41 [01;32meb-debug-app[0m
+-rw-r--r--  1 user user  773435 Nov 21 04:15 eb-strings.txt
+-rwxr-xr-x  1 user user    1814 Nov 21 03:15 [01;32mreporter.yaml.orig[0m
+drwx------  2 root root      40 Nov 21 02:14 [01;34msnap-private-tmp[0m
+drwx------  3 root root      60 Nov 21 02:14 [01;34msystemd-private-9fe25f474e0d4aa88a4cb9b61ee9b3e1-chrony.service-2N9Qou[0m
+drwx------  3 root root      60 Nov 21 02:40 [01;34msystemd-private-9fe25f474e0d4aa88a4cb9b61ee9b3e1-polkit.service-QRbqjF[0m
+drwx------  3 root root      60 Nov 21 02:14 [01;34msystemd-private-9fe25f474e0d4aa88a4cb9b61ee9b3e1-systemd-logind.service-aRRyX7[0m
+drwx------  3 root root      60 Nov 21 02:14 [01;34msystemd-private-9fe25f474e0d4aa88a4cb9b61ee9b3e1-wsl-pro.service-ZULxvi[0m
+-rwxr-xr-x  1 user user    1779 Nov 21 03:34 [01;32mvalues.yaml.orig[0m
+ls: cannot access 'service': No such file or directory
+ls: cannot access 'chart': No such file or directory
+ls: cannot access 'lab': No such file or directory
+ls: cannot access 'lab/broken-chart': No such file or directory
+ls: cannot access 'lab/cluster-state': No such file or directory
+ls: cannot access 'README.md': No such file or directory
+ls: cannot access 'ANSWERS.md': No such file or directory
+ls: cannot access 'lab/FINDINGS.md': No such file or directory
+ls: cannot access 'lab/scenario.sh': No such file or directory
+ls: cannot access 'lab/part4-session.log': No such file or directory
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mdiff -r /tmp/orig/lab/cluster-state lab/cluster-state && echo "cluster-state same"[27m
+[7mdiff /tmp/orig/lab/scenario.sh lab/scenario.sh && echo "scenario.sh same"[27m
+[7mgrep -n -A2 "^image:" lab/broken-chart/values.yaml[27m[A[Adiff -r /tmp/orig/lab/cluster-state lab/cluster-state && echo "cluster-state same"
+diff /tmp/orig/lab/scenario.sh lab/scenario.sh && echo "scenario.sh same"
+grep -n -A2 "^image:" lab/broken-chart/values.yaml
+[?2004ldiff: /tmp/orig/lab/cluster-state: No such file or directory
+diff: lab/cluster-state: No such file or directory
+diff: /tmp/orig/lab/scenario.sh: No such file or directory
+diff: lab/scenario.sh: No such file or directory
+grep: lab/broken-chart/values.yaml: No such file or directory
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mgit status --short[27m
+[7mgit ls-files | grep -v -E '^(service|chart|lab)/|^(setup.sh|README.md|ANSWERS.md)$'[27m
+[7mgit ls-files | xargs grep -l -i -E "eyJ[A-Za-z0-9_-]{20,}|BEGIN (RSA|PRIVATE)|password|token" 2>/dev/null[27m
+[7mls lab | grep -i extract[27m[A[A[A]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ git status --short
+git ls-files | grep -v -E '^(service|chart|lab)/|^(setup.sh|README.md|ANSWERS.md)$'
+git ls-files | xargs grep -l -i -E "eyJ[A-Za-z0-9_-]{20,}|BEGIN (RSA|PRIVATE)|password|token" 2>/dev/null
+ls lab | grep -i extract
+[?2004lfatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+fatal: not a git repository (or any parent up to mount point /)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+ls: cannot access 'lab': No such file or directory
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mwc -l lab/part4-session.log; ls -l lab/part4-session.log[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cwc -l lab/part4-session.log; ls -l lab/part4-session.log
+[?2004lwc: lab/part4-session.log: No such file or directory
+ls: cannot access 'lab/part4-session.log': No such file or directory
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mhelm lint chart[27m
+[7mhelm template demo chart --set replicaCount=3 --set config.appName=xyz --set config.version=9 | grep -E "replicas:|xyz|9"[27m[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Chelm lint chart
+helm template demo chart --set replicaCount=3 --set config.appName=xyz --set config.version=9 | grep -E "replicas:|xyz|9"
+[?2004l==> Linting chart
+Error unable to check Chart.yaml file in chart: stat chart/Chart.yaml: no such file or directory
+
+Error: 1 chart(s) linted, 1 chart(s) failed
+Error: non-absolute URLs should be in form of repo_name/path_to_chart, got: chart
+[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ [7mcd ~/enterprise-bot-task[27m
+[7mls -la[27m
+[7mtest -x setup.sh && echo "setup.sh executable"[27m
+[7mls service chart lab lab/broken-chart lab/cluster-state[27m
+[7mls README.md ANSWERS.md lab/FINDINGS.md lab/scenario.sh lab/part4-session.log[27m
+[7mgit status --short[27m[A[A[A[A[A]0;user@LAPTOP-SVC6BC1F: /tmp[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m/tmp[00m$ cd ~/enterprise-bot-task
+ls -la
+test -x setup.sh && echo "setup.sh executable"
+ls service chart lab lab/broken-chart lab/cluster-state
+ls README.md ANSWERS.md lab/FINDINGS.md lab/scenario.sh lab/part4-session.log
+git status --short
+[?2004ltotal 36
+drwxr-xr-x  6 user user 4096 Nov 20 12:27 [0m[01;34m.[0m
+drwxr-x--- 13 user user 4096 Nov 21 04:11 [01;34m..[0m
+drwxr-xr-x  7 user user 4096 Nov 21 04:11 [01;34m.git[0m
+-rw-r--r--  1 user user    0 Nov 20 12:25 ANSWERS.md
+-rw-r--r--  1 user user 4442 Nov 20 13:01 README.md
+drwxr-xr-x  3 user user 4096 Nov 20 12:57 [01;34mchart[0m
+drwxr-xr-x  4 user user 4096 Nov 20 14:12 [01;34mlab[0m
+drwxr-xr-x  2 user user 4096 Nov 20 12:31 [01;34mservice[0m
+-rwxr-xr-x  1 user user 1827 Nov 20 13:14 [01;32msetup.sh[0m
+setup.sh executable
+chart:
+Chart.yaml  [0m[01;34mtemplates[0m  values.yaml
+
+lab:
+[01;32mFINDINGS.md[0m  [01;34mbroken-chart[0m  [01;34mcluster-state[0m  part4-session.log  [01;32mscenario.sh[0m
+
+lab/broken-chart:
+[01;32mChart.yaml[0m  [01;34mtemplates[0m  [01;32mvalues.yaml[0m
+
+lab/cluster-state:
+[01;32mlimits.yaml[0m  [01;32mnamespace.yaml[0m
+
+service:
+Dockerfile  app.py
+ANSWERS.md  README.md  [0m[01;32mlab/FINDINGS.md[0m  lab/part4-session.log  [01;32mlab/scenario.sh[0m
+ [31mM[m lab/part4-session.log
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ [7mcd ~/enterprise-bot-task/lab[27m
+[7mkubectl get pods -n debug-lab[27m[A]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task[00m$ cd ~/enterprise-bot-task/lab
+kubectl get pods -n debug-lab
+[?2004lNAME                        READY   STATUS      RESTARTS   AGE
+backend-76468847b5-x5vbg    1/1     Running     0          26m
+gateway-7f8485d6c6-jz4cv    1/1     Running     0          26m
+metrics-57f65b6bc8-d2phz    1/1     Running     0          26m
+migrate-gmdcd               0/1     Completed   0          26m
+reporter-557c74b8c5-pnk46   0/1     Running     0          26m
+worker-8564664894-zmj9t     1/1     Running     0          26m
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7m./scenario.sh verify 2>&1 | tee /tmp/verify-now.txt | grep -E "PASS|FAIL|passing"[27m
+[7mgrep -c PASS /tmp/verify-now.txt[27m
+[7mgrep -c FAIL /tmp/verify-now.txt[27m[A[A]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ ./scenario.sh verify 2>&1 | tee /tmp/verify-now.txt | grep -E "PASS|FAIL|passing"
+grep -c PASS /tmp/verify-now.txt
+grep -c FAIL /tmp/verify-now.txt
+[?2004l  [32m[01;31m[KPASS[m[K[0m  migrate Job completed
+  [32m[01;31m[KPASS[m[K[0m  deployment backend: 1/1 ready
+  [32m[01;31m[KPASS[m[K[0m  deployment gateway: 1/1 ready
+  [32m[01;31m[KPASS[m[K[0m  deployment worker: 1/1 ready
+  [31m[01;31m[KFAIL[m[K[0m  deployment reporter: 0/1 ready
+  [32m[01;31m[KPASS[m[K[0m  deployment metrics: 1/1 ready
+  [32m[01;31m[KPASS[m[K[0m  no pods in CrashLoopBackOff
+  [32m[01;31m[KPASS[m[K[0m  ServiceAccount debug-lab/reporter can list pods
+  [31m[01;31m[KFAIL[m[K[0m  backend does not answer on http://backend:8080/healthz
+  [32m[01;31m[KPASS[m[K[0m  gateway /status reports backend=ok
+  [31m[01;31m[KFAIL[m[K[0m  reporter /report does not return a pod count
+[31m3 check(s) failing[0m, 8 [01;31m[Kpassing[m[K. Keep digging — every failure is a symptom.
+8
+3
+[?2004h]0;user@LAPTOP-SVC6BC1F: ~/enterprise-bot-task/lab[01;32muser@LAPTOP-SVC6BC1F[00m:[01;34m~/enterprise-bot-task/lab[00m$ [7mkubectl get endpoints backend -n debug-lab[27m
+[7mkubectl run t1 -n debug-lab --rm -i --restart=Never --image=busybox:1.36 --quiet -- wget -q -O- -T 6 http://backend:8080/healthz; echo " exit=$?"[27m
+[7mcd ~/enterprise-bot-task/lab[27m
+[7m./scenario.sh verify 2>&1 | grep -E "PASS|FAIL|passing"[27m[A[A[Akubectl get endpoints backend -n debug-lab
+kubectl run t1 -n debug-lab --rm -i --restart=Never --image=busybox:1.36 --quiet -- wget -q -O- -T 6 http://backend:8080/healthz; echo " exit=$?"
+cd ~/enterprise-bot-task/lab
+./scenario.sh verify 2>&1 | grep -E "PASS|FAIL|passing"
+[?2004l[33;1mWarning:[0m v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME      ENDPOINTS          AGE
+backend   10.244.0.12:8080   27m
+{"status":"ok"}
+ exit=0
+  [32m[01;31m[KPASS[m[K
